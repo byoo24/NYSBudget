@@ -1,0 +1,105 @@
+@import './reset.css';
+
+body {
+    font-family: 'Roboto', 'sans-serif';
+}
+
+.nysCAFR-container {
+    display: grid;
+    grid-template-columns: 250px auto;
+    grid-template-rows: auto auto;
+    grid-template-areas: 
+        "header header"
+        "sidebar graphic";
+    max-width: 1000px;
+    max-height: 700px;
+    margin: 0 auto;
+}
+
+#chart_header {
+    grid-area: header;
+    border: 1px solid #333;
+}
+
+#sidebar {
+    grid-area: sidebar;
+    word-break: break-word;
+    padding: 1em;
+    overflow-y: scroll;
+    border-top: 0;
+    border-right: 1px;
+    border-bottom: 1px;
+    border-left: 1px;
+    border-style: solid;
+    border-color: #333;
+
+}
+
+
+#graphic {
+    grid-area: graphic;
+    padding: 1em;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    border-top: 0;
+    border-right: 1px;
+    border-bottom: 1px;
+    border-left: 0;
+    border-style: solid;
+    border-color: #333;
+}
+
+
+span {
+    display: block;
+}
+
+
+.title {
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+    margin: 0.5em 0 0.25em;
+}
+
+.sub_title {
+    font-size: 1.05em;
+    margin: 0.5em 0;
+    font-style: italic;
+    text-align: center;
+    color: #999;
+}
+
+#menu {
+    font-size: 14px;
+    list-style: none;
+}
+
+li {
+    position: relative;
+    margin: 10px 0;
+    border-radius: 20px;
+    border: 1px solid #333;
+    cursor: pointer;
+    transition: opacity .5s;
+}
+
+li:hover{
+    opacity: .75;
+}
+
+.menu_item-text {
+    position: relative;
+    padding: 10px 20px;
+    z-index: 100;
+}
+
+.menu_item-bg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    opacity: .6;
+    border-radius: 20px;
+}

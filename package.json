@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch --mode=development",
-    "server": "http-server '/Users/joy/Desktop/demographicsNYC/'"
+    "server": "http-server '/Users/joy/Desktop/byoo24.github.io'"
   },
   "keywords": [],
   "author": "",

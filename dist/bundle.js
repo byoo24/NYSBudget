@@ -86,245 +86,19 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./js/index.js":
-/*!*********************!*\
-  !*** ./js/index.js ***!
-  \*********************/
-/*! no exports provided */
+/***/ "./data/parseData.js":
+/*!***************************!*\
+  !*** ./data/parseData.js ***!
+  \***************************/
+/*! exports provided: functionalArea, fundTypes, fpCategories */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "functionalArea", function() { return functionalArea; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fundTypes", function() { return fundTypes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fpCategories", function() { return fpCategories; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-/* harmony import */ var d3_dsv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! d3-dsv */ "./node_modules/d3-dsv/src/index.js");
-/* harmony import */ var _parseData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./parseData */ "./js/parseData.js");
-/* harmony import */ var _sunburst__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./sunburst */ "./js/sunburst.js");
-/* harmony import */ var _sunburst_demo__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./sunburst_demo */ "./js/sunburst_demo.js");
-
-
-
-
-
-
-
-
-
-// const sunburst = require('./sunburst.js');
-
-// const data = require('./dist/data.json');
-// let data = null;
-
-const convertInt = (str) => {
-    let num = str.replace(/[$,]/g, "");
-    return parseInt(num);
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // d3.csv("https://raw.githubusercontent.com/d3/d3-hierarchy/v1.1.8/test/data/flare.json")
-    //     .then((data) => {
-    //         console.log(data);
-    //         sunburst(data);
-    //     });
-
-    // d3.csv("./data/SpendingData.csv")
-    //     .then((data) => {
-    //         let d = parseData(data);
-            
-    //         console.log(d);
-    //     })
-
-    d3__WEBPACK_IMPORTED_MODULE_0__["json"]("./dist/data_demo.json")
-        .then((data) => {
-            // debugger
-            console.log(data);
-            Object(_sunburst_demo__WEBPACK_IMPORTED_MODULE_4__["default"])(data);
-        });
-
-
-    // d3.json("./dist/data.json")
-    //     .then((data) => {
-    //         // debugger
-    //         console.log(data);
-    //         sunburst(data);
-    //     });
-
-    // d3.csv("./data/SpendingData.csv")
-    //     .then((data) => {
-    //         // debugger
-    //         let d = parseData(data);
-    //         // // debugger
-
-    //         // let test = {};
-
-    //         // q.forEach((obj) => {
-    //         //     // debugger
-    //         //     test[obj.key] = obj;
-    //         // });
-
-    //         // console.log(test);
-    //         // debugger
-    //         // console.log(d3.json(data));
-    //         // let d = parseData(data);
-    //         sunburst(d);
-    //     })
-
-
-
-    // d3.csv("./data/SpendingData.csv").then((data) => {
-       
-    //     var func = d3.nest()
-    //                     .key((d) => d.Function )
-    //                     .key((d) => d.Agency )
-    //                     .key((d) => d["Fund Type"])
-    //                     .key((d) => d["FP Category"])
-    //                     .key((d) => d.Fund)
-    //                     .rollup((v) => { 
-                            
-    //                         return {
-    //                             "2019-20 Estimates": d3.sum(v, (e) => { 
-    //                                 let value = e["2019-20 Estimates"] || "0";
-    //                                 return convertInt(value); 
-    //                             }),
-    //                             "2018-19  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2018-19  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2017-18  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2017-18  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2016-17  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2016-17  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2015-16  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2015-16  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2014-15  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2014-15  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2013-14  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2013-14  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2012-13  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2012-13  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2011-12  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2011-12  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2010-11  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2010-11  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                             "2009-10  Actuals": d3.sum(v, (e) => {
-    //                                 let value = e["2009-10  Actuals"] || "0";
-    //                                 return convertInt(value);
-    //                             }),
-    //                         }
-                            
-    //                     })
-    //                     .entries(data)
-
-    //     console.log(func);
-    // });
-
-
-    // d3.dsv(",", "./data/SpendingData.csv", (d) => {
-    //     console.log(d);
-    // });
-
-    // const json = d3.csvParse("./data/SpendingData.csv")
-    //     .row(function(d) {
-    //         return {
-    //             function:parseData(d.Function)
-    //         }
-    //     })
-
-
-
-
-
-
-    // d3.dsv(",", "./data/SpendingData.csv", function(d) {
-
-    //     return {
-
-    //         "test": csvFormat(d.Function)
-    //         // "name": "Functional Area",
-    //         // "children": [
-    //         //     {
-    //         //         "name": d.Function,
-    //         //     }
-    //         // ]
-    //     }
-
-    //     // return {
-    //     //     function: d.Function,
-    //     //     agency2: {
-    //     //         agency: d.Agency
-    //     //     },
-    //     //     agency: d.Agency,
-    //     //     fund_type: d["Fund Type"],
-    //     //     fp_category: d["FP Category"],
-    //     //     fund: d.Fund,
-    //     //     subfund_name: d["Subfund Name"],
-    //     //     "2019-20 Estimates": d["2019-20  Estimates"],
-    //     //     "2018-19 Actuals": d["2018-19  Actuals"],
-    //     //     "2017-18 Actuals": d["2017-18  Actuals"],
-    //     //     "2016-17 Actuals": d["2016-17  Actuals"],
-    //     //     "2015-16 Actuals": d["2015-16  Actuals"],
-    //     //     "2014-15 Actuals": d["2014-15  Actuals"],
-    //     //     "2013-14 Actuals": d["2013-14  Actuals"],
-    //     //     "2012-13 Actuals": d["2012-13  Actuals"],
-    //     //     "2011-12 Actuals": d["2011-12  Actuals"],
-    //     //     "2010-11 Actuals": d["2010-11  Actuals"],
-    //     //     "2009-10 Actuals": d["2009-10  Actuals"],
-    //     //     "2008-09 Actuals": d["2008-09  Actuals"],
-    //     //     "2007-08 Actuals": d["2007-08  Actuals"],
-    //     //     "2006-07 Actuals": d["2006-07  Actuals"],
-    //     //     "2005-06 Actuals": d["2005-06  Actuals"],
-    //     //     "2004-05 Actuals": d["2004-05  Actuals"],
-    //     //     "2003-04 Actuals": d["2003-04  Actuals"],
-    //     //     "2002-03 Actuals": d["2002-03  Actuals"],
-    //     //     "2001-02 Actuals": d["2001-02  Actuals"],
-    //     // };
-    // }).then(function(data) {
-    //     console.log(data);
-    // })
-
-    // d3.dsv(",", "test.csv", function (d) {
-    //     return {
-    //         year: new Date(+d.Year, 0, 1), // convert "Year" column to Date
-    //         make: d.Make,
-    //         model: d.Model,
-    //         length: +d.Length // convert "Length" column to number
-    //     };
-    // }).then(function (data) {
-    //     console.log(data);
-    // });
-
-});
-
-/***/ }),
-
-/***/ "./js/parseData.js":
-/*!*************************!*\
-  !*** ./js/parseData.js ***!
-  \*************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-
 
 
 
@@ -333,141 +107,266 @@ const convertToInt = (str) => {
     return parseInt(num);
 }
 
-const parseData = (data) => {
-    // var test = d3.key(() => "key");
-    // debugger
+const functionalArea = (data) => {
 
     let func = {
-        key: "NYS CAFR",
+        key: "Functional Area",
         values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
             .key((d) => d.Function)
             .key((d) => d.Agency)
-            .key((d) => d["Fund Type"])
-            .key((d) => d["FP Category"])
-            .key((d) => d.Fund)
             .rollup((v) => {
                 return {
-                    "2019-20 Estimates": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2019-20 Estimates"] || "0";
-                        return { amount: convertToInt(amt) };
+                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
+                        let num = e["2019-20  Estimates"] || "0";
+                        let value = convertToInt(num);
+
+                        if (value < 1) return 1;
+                        return value;
                     }),
-                    "2018-19  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2018-19  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2017-18  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2017-18  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2016-17  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2016-17  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2015-16  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2015-16  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2014-15  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2014-15  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2013-14  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2013-14  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2012-13  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2012-13  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2011-12  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2011-12  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2010-11  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2010-11  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
-                    "2009-10  Actuals": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let amt = e["2009-10  Actuals"] || "0";
-                        return { amount: convertToInt(amt) };
-                    }),
+                    // "2018-19": d3.sum(v, (e) => {
+                    //     let amt = e["2018-19  Actuals"];
+                    //     return convertToInt(amt);
+                    // }),
+                    // "2017-18": d3.sum(v, (e) => {
+                    //     let amt = e["2017-18  Actuals"];
+                    //     return convertToInt(amt);
+                    // }),
                 }
 
             })
             .entries(data)
     }
-
-    // var func = d3.nest()
-    //     .key((d) => d.Function)
-    //     .key((d) => d.Agency)
-    //     .key((d) => d["Fund Type"])
-    //     .key((d) => d["FP Category"])
-    //     .key((d) => d.Fund)
-    //     .rollup((v) => {
-    //         return {
-    //             "2019-20 Estimates": d3.sum(v, (e) => {
-    //                 let amt = e["2019-20 Estimates"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2018-19  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2018-19  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2017-18  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2017-18  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2016-17  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2016-17  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2015-16  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2015-16  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2014-15  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2014-15  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2013-14  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2013-14  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2012-13  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2012-13  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2011-12  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2011-12  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2010-11  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2010-11  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //             "2009-10  Actuals": d3.sum(v, (e) => {
-    //                 let amt = e["2009-10  Actuals"] || "0";
-    //                 return { amount: convertToInt(amt) };
-    //             }),
-    //         }
-
-    //     })
-    //     .entries(data)
-
-    console.log(func);
-    return func;
-
+    return dataCorrectFormat(func);
 }
 
 
-/* harmony default export */ __webpack_exports__["default"] = (parseData);
+
+
+
+const fundTypes = (data) => {
+
+    let func = {
+        key: "Fund Types",
+        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
+            .key((d) => d["Fund Type"])
+            .key((d) => d.Fund)
+            .key((d) => d["Subfund Name"])
+            .rollup((v) => {
+                return {
+                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
+                        let amt = e["2019-20  Estimates"] || "0";
+                        return convertToInt(amt);
+                    }),
+                    // "2018-19": d3.sum(v, (e) => {
+                    //     let amt = e["2018-19  Actuals"] || "0";
+                    //     return convertToInt(amt);
+                    // }),
+                    // "2017-18": d3.sum(v, (e) => {
+                    //     let amt = e["2017-18  Actuals"] || "0";
+                    //     return convertToInt(amt);
+                    // }),
+                }
+            })
+            .entries(data)
+    }
+    return dataCorrectFormat(func);
+}
+
+
+
+
+
+
+const fpCategories = (data) => {
+
+    let func = {
+        key: "FP Categories",
+        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
+            .key((d) => d["FP Category"])
+            .rollup((v) => {
+                return {
+                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
+                        let amt = e["2019-20  Estimates"] || "0";
+                        return convertToInt(amt);
+                    }),
+                    // "2018-19": d3.sum(v, (e) => {
+                    //     let amt = e["2018-19  Actuals"] || "0";
+                    //     return convertToInt(amt);
+                    // }),
+                    // "2017-18": d3.sum(v, (e) => {
+                    //     let amt = e["2017-18  Actuals"] || "0";
+                    //     return convertToInt(amt);
+                    // }),
+                }
+
+            })
+            .entries(data)
+    }
+    return dataCorrectFormat(func);
+}
+
+
+
+
+
+
+
+
+
+function convertToDollar (amt) {
+    let dollarStr = "";
+    let amtCopy = amt;
+
+    // while (amtCopy > 1000){
+    //     let value = amtCopy % 1000;
+
+    //     if(dollarStr !== ""){
+    //         dollarStr = value + ',' + dollarStr;
+    //     } else {
+    //         dollarStr = value;
+    //     }
+    //     amtCopy = Math.floor(amtCopy / 1000);
+    // }
+
+    // dollarStr = amtCopy + dollarStr;
+    // console.log(amt, dollarStr);
+
+
+    console.log(amt);
+    if (amt < 1) {
+        return 1;
+    }
+    // console.log(amt);
+    return amt;
+}
+
+
+
+function dataCorrectFormat(data) {
+
+    const { values, value } = data;
+
+    const cleanData = {};
+    cleanData.name = data.key
+    cleanData.children = new Array();
+
+    if (value) {
+        for (let key in value) {
+            let newObj = {
+                name: `${key}: ${convertToDollar(value[key])}`,
+                value: value[key]
+            }
+            cleanData.children.push(newObj);
+        }
+    }
+
+    if (values && values.length > 0) {
+
+        for (let i = 0; i < values.length; i++) {
+            let newObj = {};
+
+            if (values[i] instanceof Object) {
+                newObj.name = values[i].key;
+                newObj.children = new Array();
+
+                let inner = dataCorrectFormat(values[i]);
+                cleanData.children.push(inner);
+            }
+        }
+    }
+    return cleanData
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const parseData = (data) => {
+
+//     let func = {
+//         key: "NYS CAFR",
+//         values: d3.nest()
+//             .key((d) => d.Function)
+//             .key((d) => d.Agency)
+//             .key((d) => d["Fund Type"])
+//             .key((d) => d["FP Category"])
+//             .key((d) => d.Fund)
+//             .rollup((v) => {
+//                 return {
+//                     "2019-20": d3.sum(v, (e) => {
+//                         let amt = e["2019-20  Estimates"] || "0";
+//                         return convertToInt(amt);
+//                     }),
+//                     // "2018-19": d3.sum(v, (e) => {
+//                     //     let amt = e["2018-19  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2017-18": d3.sum(v, (e) => {
+//                     //     let amt = e["2017-18  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2016-17": d3.sum(v, (e) => {
+//                     //     let amt = e["2016-17  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2015-16": d3.sum(v, (e) => {
+//                     //     let amt = e["2015-16  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2014-15": d3.sum(v, (e) => {
+//                     //     let amt = e["2014-15  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2013-14": d3.sum(v, (e) => {
+//                     //     let amt = e["2013-14  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2012-13": d3.sum(v, (e) => {
+//                     //     let amt = e["2012-13  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2011-12": d3.sum(v, (e) => {
+//                     //     let amt = e["2011-12  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2010-11": d3.sum(v, (e) => {
+//                     //     let amt = e["2010-11  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                     // "2009-10": d3.sum(v, (e) => {
+//                     //     let amt = e["2009-10  Actuals"] || "0";
+//                     //     return convertToInt(amt);
+//                     // }),
+//                 }
+
+//             })
+//             .entries(data)
+//     }
+
+//     // console.log(func);
+//     return func;
+// }
 
 /***/ }),
 
-/***/ "./js/sunburst.js":
-/*!************************!*\
-  !*** ./js/sunburst.js ***!
-  \************************/
+/***/ "./data/sunburst.js":
+/*!**************************!*\
+  !*** ./data/sunburst.js ***!
+  \**************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -479,11 +378,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
 const sunburst = (data) => {
-    const color = d3__WEBPACK_IMPORTED_MODULE_0__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_0__["quantize"](d3__WEBPACK_IMPORTED_MODULE_0__["interpolateRainbow"], data.values.length + 1));
+    const color = d3__WEBPACK_IMPORTED_MODULE_0__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_0__["quantize"](d3__WEBPACK_IMPORTED_MODULE_0__["interpolateSinebow"], data.children.length + 1));
     const format = d3__WEBPACK_IMPORTED_MODULE_0__["format"](",d");
     const width = 932;
     const radius = width / 6;
@@ -497,14 +393,22 @@ const sunburst = (data) => {
         .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
 
     
-
+    // CIRCLE PARTITION
     const root = partition(data);
-    
     root.each(d => d.current = d);
+    
+    // SIDEBAR
+    const menu = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#menu");
+    const rootDom = d3__WEBPACK_IMPORTED_MODULE_0__["select"]("#root");
 
+    
+
+    
+
+    // CIRCLE
     const svg = d3__WEBPACK_IMPORTED_MODULE_0__["create"]("svg")
         .attr("viewBox", [0, 0, width, width])
-        .style("font", "10px sans-serif");
+        .style("font", "12px");
 
     const g = svg.append("g")
         .attr("transform", `translate(${width / 2}, ${width / 2})`);
@@ -513,185 +417,37 @@ const sunburst = (data) => {
         .selectAll("path")
         .data(root.descendants().slice(1))
         .join("path")
-            .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.key); })
-            .attr("fill-opacity", d => arcVisible(d.current) ? (d.values ? 0.6 : 0.4) : 0)
-            .attr("d", d => arc(d.current));
-
-    path.filter(d => d.values)
-        .style("cursor", "pointer")
-        .on("click", clicked);
-
-    path.append("title")
-        .text(d => `${d.ancestors().map(d => d.data.key).reverse().join("/")}\n${format(d.amount)}`);
-
-    const label = g.append("g")
-            .attr("pointer-events", "none")
-            .attr("text-anchor", "middle")
-            .style("user-select", "none")
-        .selectAll("text")
-        .data(root.descendants().slice(1))
-        .join("text")
-            .attr("dy", "0.35em")
-            .attr("fill-opacity", d => +labelVisible(d.current))
-            .attr("transform", d => labelTransform(d.current))
-            .text(d => d.data.key);
-
-    const parent = g.append("circle")
-        .datum(root)
-        .attr("r", radius)
-        .attr("fill", "none")
-        .attr("pointer-events", "all")
-        .on("click", clicked);
-    // const g = svg.append("g")
-    //     .selectAll('path')
-    //     .data(root.descendants().slice(1))
-
-
-
-
-
-
-    function partition(data) {
-
-        
-        const root = d3__WEBPACK_IMPORTED_MODULE_0__["hierarchy"](data)
-            .sum(d => {
-                debugger
-                return d.amount})
-            .sort((a, b) => b.amount - a.amount);
-        return d3__WEBPACK_IMPORTED_MODULE_0__["partition"]()
-            .size([2 * Math.PI, root.height + 1])(root);
-    }
-
-    function arcVisible(d) {
-        return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
-    }
-
-    function labelVisible(d) {
-        return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
-    }
-
-    function labelTransform(d) {
-        const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-        const y = (d.y0 + d.y1) / 2 * radius;
-        return `rotate(${x - 90}) translate(${y}, 0) rotate(${x < 180 ? 0 : 180})`;
-    }
-
-    function clicked(p) {
-        parent.datum(p.parent || root);
-
-        root.each(d => d.target = {
-            x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-            x1: Math.max(0, Math.min(1, (d.x1 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
-            y0: Math.max(0, d.y0 - p.depth),
-            y1: Math.max(0, d.y1 - p.depth)
-        });
-
-        const t = g.transition().duration(750);
-
-        path.transition(t)
-            .tween("data", d => {
-                const i = d3__WEBPACK_IMPORTED_MODULE_0__["interpolate"](d.current, d.target);
-                return t => d.current = i(t);
-            })
-            .filter(function (d) {
-                return +this.getAttribute("fill-opacity") || arcVisible(d.target);
-            })
-            .attr("fill-opacity", d => arcVisible(d.target) ? (d.values ? 0.6 : 0.4) : 0)
-            .attrTween("d", d => () => arc(d.current));
-
-        label.filter(function(d) {
-            return +this.getAttribute("fill-opacity") || labelVisible(d.target);
-        }).transition(t)
-            .attr("fill-opacity", d => +labelVisible(d.target))
-            .attrTween("transform", d => () => labelTransform(d.current));
-    }
-
-
-
-    console.log(svg.node());
-    const body = document.getElementsByTagName('body')[0];
-    body.append(svg.node());
-            // return svg.node();
-}
-
-
-/* harmony default export */ __webpack_exports__["default"] = (sunburst);
-
-
-/***/ }),
-
-/***/ "./js/sunburst_demo.js":
-/*!*****************************!*\
-  !*** ./js/sunburst_demo.js ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-
-
-
-
-
-
-
-
-const sunburst = (data) => {
-    const color = d3__WEBPACK_IMPORTED_MODULE_0__["scaleOrdinal"](d3__WEBPACK_IMPORTED_MODULE_0__["quantize"](d3__WEBPACK_IMPORTED_MODULE_0__["interpolateRainbow"], data.children.length + 1));
-    const format = d3__WEBPACK_IMPORTED_MODULE_0__["format"](",d");
-    const width = 932;
-    const radius = width / 6;
-
-    const arc = d3__WEBPACK_IMPORTED_MODULE_0__["arc"]()
-        .startAngle(d => d.x0)
-        .endAngle(d => d.x1)
-        .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-        .padRadius(radius * 1.5)
-        .innerRadius(d => d.y0 * radius)
-        .outerRadius(d => Math.max(d.y0 * radius, d.y1 * radius - 1))
-
-    
-
-    const root = partition(data);
-    
-    root.each(d => d.current = d);
-
-    const svg = d3__WEBPACK_IMPORTED_MODULE_0__["create"]("svg")
-        .attr("viewBox", [0, 0, width, width])
-        .style("font", "10px sans-serif");
-
-    const g = svg.append("g")
-        .attr("transform", `translate(${width / 2}, ${width / 2})`);
-
-    const path = g.append("g")
-        .selectAll("path")
-        .data(root.descendants().slice(1))
-        .join("path")
-            .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-            .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
-            .attr("d", d => arc(d.current));
+        .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+        .attr("fill-opacity", d => arcVisible(d.current) ? (d.children ? 0.6 : 0.4) : 0)
+        .attr("d", d => arc(d.current));
 
     path.filter(d => d.children)
         .style("cursor", "pointer")
         .on("click", clicked);
 
     path.append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
+        .text(d => `${format(d.value)}`);
+        // .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
     const label = g.append("g")
-            .attr("pointer-events", "none")
-            .attr("text-anchor", "middle")
-            .style("user-select", "none")
+        .attr("pointer-events", "none")
+        .attr("text-anchor", "middle")
+        .style("user-select", "none")
+        .style("text-overflow", "ellipsis")
+        .style("overflow", "hidden")
         .selectAll("text")
         .data(root.descendants().slice(1))
         .join("text")
-            .attr("dy", "0.35em")
-            .attr("fill-opacity", d => +labelVisible(d.current))
-            .attr("transform", d => labelTransform(d.current))
-            .text(d => d.data.name);
+        .attr("dy", "0.35em")
+        .attr("fill-opacity", d => +labelVisible(d.current))
+        .attr("transform", d => labelTransform(d.current))
+        .text(d => {
+            if (d.data.name.length > 14) {
+                return d.data.name.slice(0, 15) + "...";
+            } else {
+                return d.data.name;
+            }
+        });
 
     const parent = g.append("circle")
         .datum(root)
@@ -699,25 +455,56 @@ const sunburst = (data) => {
         .attr("fill", "none")
         .attr("pointer-events", "all")
         .on("click", clicked);
-    // const g = svg.append("g")
-    //     .selectAll('path')
-    //     .data(root.descendants().slice(1))
 
 
+    
+    function renderCategories(p) {
+        rootDom.append("div")
+            .style("display", "block")
+            .selectAll("span")
+            .data(p.descendants().slice(0, 1))
+            .join("span")
+            .style("display", "block")
+            .text(d => d.data.name)
+            .on("click", clicked);
+    }
 
+
+    function renderMenu(p) {
+        
+        menu.selectAll("li")
+            .data(p.descendants().slice(0, 1)[0].children)
+            .enter()
+            .append("li")
+            .classed("menu-item", true)
+            .style("user-select", "none")
+            .attr("fill-opacity", d => +labelVisible(d.current))
+            .on("click", clicked);
+
+        menu.selectAll("li")
+            .data(p.descendants().slice(0, 1)[0].children)
+            .append("span")
+            .classed("menu_item-text", true)
+            .text(d => d.data.name)
+
+        menu.selectAll("li")
+            .data(p.descendants().slice(0, 1)[0].children)
+            .append("span")
+            .classed("menu_item-bg", true)
+            .style("background-color", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+    }
 
 
 
     function partition(data) {
         const root = d3__WEBPACK_IMPORTED_MODULE_0__["hierarchy"](data)
-            .sum(d => {
-                debugger
-                return d.value})
+            .sum(d => d.value)
             .sort((a, b) => b.value - a.value);
         return d3__WEBPACK_IMPORTED_MODULE_0__["partition"]()
             .size([2 * Math.PI, root.height + 1])(root);
     }
 
+    // CIRCLE
     function arcVisible(d) {
         return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
     }
@@ -734,6 +521,11 @@ const sunburst = (data) => {
 
     function clicked(p) {
         parent.datum(p.parent || root);
+
+        // renderMenu(p);
+
+
+        if(!p.children) return;
 
         root.each(d => d.target = {
             x0: Math.max(0, Math.min(1, (d.x0 - p.x0) / (p.x1 - p.x0))) * 2 * Math.PI,
@@ -753,26 +545,137 @@ const sunburst = (data) => {
                 return +this.getAttribute("fill-opacity") || arcVisible(d.target);
             })
             .attr("fill-opacity", d => arcVisible(d.target) ? (d.children ? 0.6 : 0.4) : 0)
-            .attrTween("d", d => () => arc(d.current));
+            .attrTween("d", d => () => { 
+                // debugger
+                // if(!d.current.x1) d.current.x1 = d.current.y1;
+                return arc(d.current)
+            });
 
-        label.filter(function(d) {
+        label.filter(function (d) {
             return +this.getAttribute("fill-opacity") || labelVisible(d.target);
         }).transition(t)
             .attr("fill-opacity", d => +labelVisible(d.target))
             .attrTween("transform", d => () => labelTransform(d.current));
+
+        
+        
+        menu.selectAll("li")
+            .data(p)    
+            .exit()
+            .remove()
+            
+
+        // menu.selectAll("li")
+        //     .data(root.descendants().slice(0, 1)[0].children)
+        //     .enter()
+        //     .append("li")
+        //     .classed("menu-item", true)
+        //     .style("user-select", "none")
+        //     .attr("fill-opacity", d => +labelVisible(d.current))
+        //     .on("click", clicked);
+
+        renderMenu(p);
+
+
+
+        // menuItems.filter(function (d) {
+        //     return +this.getAttribute("fill-opacity") || labelVisible(d.target);
+        // })
     }
 
 
+    // SIDEBAR
+    function menuItemVisible(d) {
+        if (d.y1 <= 2 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03){
+            return 'block';
+        } else {
+            return 'none';
+        }
+    }
 
-    console.log(svg.node());
-    const body = document.getElementsByTagName('body')[0];
-    body.append(svg.node());
-            // return svg.node();
+    d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"]("#graphic > *").remove();
+
+    const graphic = document.getElementById('graphic');
+    graphic.append(svg.node());
+    // return svg.node();
+    
+    d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"]("#root > *").remove();
+    d3__WEBPACK_IMPORTED_MODULE_0__["selectAll"]("#menu > *").remove();
+    // const sidebar = document.getElementById('menu');
+    // sidebar.append(menuItems.node());
+    renderCategories(root);
+    renderMenu(root);
 }
 
 
 /* harmony default export */ __webpack_exports__["default"] = (sunburst);
 
+
+/***/ }),
+
+/***/ "./js/index.js":
+/*!*********************!*\
+  !*** ./js/index.js ***!
+  \*********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
+/* harmony import */ var _data_parseData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/parseData */ "./data/parseData.js");
+/* harmony import */ var _data_sunburst__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/sunburst */ "./data/sunburst.js");
+
+
+
+
+let dataFunctions = null, dataFunds = null, dataFP = null;
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    let categories = document.getElementsByClassName('category');
+    
+    for( let i = 0; i < categories.length; i++) {
+        let cat = categories[i];
+        cat.addEventListener('click', e => { renderData(e) });
+    }
+
+
+    
+    d3__WEBPACK_IMPORTED_MODULE_0__["csv"]("./data/SpendingData.csv")
+        .then((data) => {
+            dataFunctions = _data_parseData__WEBPACK_IMPORTED_MODULE_1__["functionalArea"](data);
+            dataFunds = _data_parseData__WEBPACK_IMPORTED_MODULE_1__["fundTypes"](data);
+            dataFP = _data_parseData__WEBPACK_IMPORTED_MODULE_1__["fpCategories"](data);
+
+            Object(_data_sunburst__WEBPACK_IMPORTED_MODULE_2__["default"])(dataFunctions);
+        });
+});
+
+
+
+function renderData(e){
+
+    switch (e.target.getAttribute('id')) {
+        case "category_functions":
+            Object(_data_sunburst__WEBPACK_IMPORTED_MODULE_2__["default"])(dataFunctions);
+            break;
+        case "category_funds":
+            Object(_data_sunburst__WEBPACK_IMPORTED_MODULE_2__["default"])(dataFunds);
+            break;
+        case "category_fp":
+            Object(_data_sunburst__WEBPACK_IMPORTED_MODULE_2__["default"])(dataFP);
+            break;
+    }
+
+
+    console.log('yay');
+}
 
 /***/ }),
 
