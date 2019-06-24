@@ -1548,7 +1548,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // console.log(fundTypes);
             // console.log(fundTypes_funds);
             // console.log(fpCategories);
-            debugger
+
             
             Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_4__["default"])(fullBudget.sub);
             // pieGraph(fullBudget.sub);
@@ -1604,7 +1604,6 @@ function generateSubTabs(list){
     let subTabs = document.getElementById('sub_tabs');
     subTabs.classList.add('active');
 
-    debugger
 
     list.forEach(obj => {
         let li = document.createElement('li');
