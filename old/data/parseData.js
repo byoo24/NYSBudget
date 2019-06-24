@@ -35,6 +35,7 @@ export const functionalArea = (data) => {
             })
             .entries(data)
     }
+    console.log(func);
     return dataCorrectFormat(func);
 }
 
