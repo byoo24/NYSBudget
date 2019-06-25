@@ -229,15 +229,13 @@ const barGraph = (data) => {
 /*!*******************************!*\
   !*** ./data/parseBarsData.js ***!
   \*******************************/
-/*! exports provided: fullBudget, functionalArea, functionalArea_Agencies, fundTypes, fundTypes_funds, fpCategories */
+/*! exports provided: fullBudget, functionalArea_Agencies, fundTypes_funds, fpCategories */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fullBudget", function() { return fullBudget; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "functionalArea", function() { return functionalArea; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "functionalArea_Agencies", function() { return functionalArea_Agencies; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fundTypes", function() { return fundTypes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fundTypes_funds", function() { return fundTypes_funds; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fpCategories", function() { return fpCategories; });
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
@@ -251,30 +249,60 @@ const convertToInt = (str) => {
 
 
 
+
+
+
+
+
+
+
 function dataCleanFormat(data) {
     let cleanData = {
         name: data.key,
+        sub: [],
+        values: []
     };
 
     if (data.value) {
-        cleanData.sub = [];
+        cleanData.sub = null;
         
         for (let key in data.value) {
             let newObj = {
                 name: key,
                 value: data.value[key]
             }
-            cleanData.sub.push(newObj);
+            cleanData.values.push(newObj);
         }
     } else if (data.values) {
-        cleanData.sub = [];
         
         data.values.forEach((obj) => {
-            let inner = dataCleanFormat(obj);
-            cleanData.sub.push(inner);
+
+            let innerObj = dataCleanFormat(obj);
+            cleanData.sub.push(innerObj);
+
+            if (cleanData.values.length < 1) {
+
+                // deep dup
+                innerObj.values.forEach((obj) => {
+                    let newObj = {};
+
+                    for (let key in obj) {
+                        newObj.name = obj.name;
+                        newObj.value = obj.value;
+                    }
+                    cleanData.values.push(newObj);
+                })
+
+            } else {
+
+                for (let i = 0; i < cleanData.values.length; i++) {
+                    let num1 = cleanData.values[i].value;
+                    let num2 = innerObj.values[i].value;
+                    cleanData.values[i].value = num1 + num2;
+                }
+            }
         });
     }
-
     return cleanData;
 }
 
@@ -334,67 +362,67 @@ const fullBudget = (data) => {
 
 
 
-const functionalArea = (data) => {
+// export const functionalArea = (data) => {
 
-    let func = {
-        key: "Functional Area",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d.Function)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
+//     let func = {
+//         key: "Functional Area",
+//         values: d3.nest()
+//             .key((d) => d.Function)
+//             .rollup((v) => {
+//                 return {
+//                     "2019-20": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2019-20  Estimates"]);
+//                         return value * 1000;
+//                     }),
+//                     "2018-19": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2018-19  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2017-18": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2017-18  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2016-17": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2016-17  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2015-16": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2015-16  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2014-15": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2014-15  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2013-14": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2013-14  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2012-13": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2012-13  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2011-12": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2011-12  Actuals"]);
+//                         return value * 1000;
+//                     })
+//                 }
+//             }).entries(data),
+//     }
 
-    let cleanData = dataCleanFormat(func);
+//     let cleanData = dataCleanFormat(func);
 
 
-    cleanData.sub = cleanData.sub.filter(function(x) {
-        return x.sub[0].value > 0;
-    });
+//     cleanData.sub = cleanData.sub.filter(function(x) {
+//         return x.sub[0].value > 0;
+//     });
 
-    cleanData.sub.sort(function(x, y) {
-        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.sub[0].value, y.sub[0].value);
-    });
+//     cleanData.sub.sort(function(x, y) {
+//         return d3.descending(x.sub[0].value, y.sub[0].value);
+//     });
     
-    return cleanData;
-}
+//     return cleanData;
+// }
 
 
 
@@ -403,9 +431,10 @@ const functionalArea = (data) => {
 const functionalArea_Agencies = (data) => {
 
     let func = {
-        key: "Agencies",
+        key: "Functional Area",
         values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
             .key((d) => d.Function)
+
             .key((d) => d.Agency)
             .rollup((v) => {
                 return {
@@ -453,91 +482,95 @@ const functionalArea_Agencies = (data) => {
 
     let cleanData = dataCleanFormat(func);
 
-    cleanData.sub.forEach((obj) => {
+    cleanData.sub.forEach((level1) => {
 
-        obj.sub = obj.sub.filter(function (x) {
-            return x.sub[0].value > 0;
+        level1.sub = level1.sub.filter(function (x) {
+            return x.values[0].value > 0;
         });
 
-        obj.sub.sort(function (x, y) {
-            return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.sub[0].value, y.sub[0].value);
+        level1.sub.sort(function (x, y) {
+            return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.values[0].value, y.values[0].value);
         });
     });
-
-    return cleanData;
-}
-
-
-
-
-
-
-
-
-
-
-
-const fundTypes = (data) => {
-
-    let func = {
-        key: "Fund Types",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d["Fund Type"])
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-
-    let cleanData = dataCleanFormat(func);
-
-    cleanData.sub = cleanData.sub.filter(function (x) {
-        return x.sub[0].value > 0;
-    })
 
     cleanData.sub.sort(function (x, y) {
-        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.sub[0].value, y.sub[0].value);
+        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.values[0].value, y.values[0].value);
     });
-    
     
     return cleanData;
 }
+
+
+
+
+
+
+
+
+
+
+
+// export const fundTypes = (data) => {
+
+//     let func = {
+//         key: "Fund Types",
+//         values: d3.nest()
+//             .key((d) => d["Fund Type"])
+//             .rollup((v) => {
+//                 return {
+//                     "2019-20": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2019-20  Estimates"]);
+//                         return value * 1000;
+//                     }),
+//                     "2018-19": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2018-19  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2017-18": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2017-18  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2016-17": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2016-17  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2015-16": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2015-16  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2014-15": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2014-15  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2013-14": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2013-14  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2012-13": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2012-13  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2011-12": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2011-12  Actuals"]);
+//                         return value * 1000;
+//                     })
+//                 }
+//             }).entries(data),
+//     }
+
+//     let cleanData = dataCleanFormat(func);
+
+//     cleanData.sub = cleanData.sub.filter(function (x) {
+//         return x.sub[0].value > 0;
+//     })
+
+//     cleanData.sub.sort(function (x, y) {
+//         return d3.descending(x.sub[0].value, y.sub[0].value);
+//     });
+    
+    
+//     return cleanData;
+// }
 
 
 
@@ -605,19 +638,42 @@ const fundTypes_funds = (data) => {
                 }
             }).entries(data),
     }
+    // let cleanData = dataCleanFormat(func);
+
+    // cleanData.sub.forEach((obj) => {
+    //     obj.sub = obj.sub.filter(function (x) {
+    //         return x.sub[0].value > 0;
+    //     });
+
+    //     obj.sub.sort(function (x, y) {
+    //         return d3.descending(x.sub[0].value, y.sub[0].value);
+    //     });
+    // })
+    
+    // return cleanData;
+
+
+
     let cleanData = dataCleanFormat(func);
 
-    cleanData.sub.forEach((obj) => {
-        obj.sub = obj.sub.filter(function (x) {
-            return x.sub[0].value > 0;
+    cleanData.sub.forEach((level1) => {
+
+        level1.sub = level1.sub.filter(function (x) {
+            return x.values[0].value > 0;
         });
 
-        obj.sub.sort(function (x, y) {
-            return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.sub[0].value, y.sub[0].value);
+        level1.sub.sort(function (x, y) {
+            return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.values[0].value, y.values[0].value);
         });
-    })
-    
+    });
+
+    cleanData.sub.sort(function (x, y) {
+        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.values[0].value, y.values[0].value);
+    });
+
     return cleanData;
+
+    
 }
 
 
@@ -672,16 +728,16 @@ const fpCategories = (data) => {
                 }
             }).entries(data),
     }
+
     let cleanData = dataCleanFormat(func);
-
+    
     cleanData.sub = cleanData.sub.filter(function (x) {
-        return x.sub[0].value > 0;
-    })
-
-    cleanData.sub.sort(function (x, y) {
-        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.sub[0].value, y.sub[0].value);
+        return x.values[0].value > 0;
     });
 
+    cleanData.sub.sort(function (x, y) {
+        return d3__WEBPACK_IMPORTED_MODULE_0__["descending"](x.values[0].value, y.values[0].value);
+    });
 
     return cleanData;
 }
@@ -696,32 +752,7 @@ const fpCategories = (data) => {
 
 
 
-function convertToDollar(amt) {
-    let dollarStr = "";
-    let amtCopy = amt;
 
-    // while (amtCopy > 1000){
-    //     let value = amtCopy % 1000;
-
-    //     if(dollarStr !== ""){
-    //         dollarStr = value + ',' + dollarStr;
-    //     } else {
-    //         dollarStr = value;
-    //     }
-    //     amtCopy = Math.floor(amtCopy / 1000);
-    // }
-
-    // dollarStr = amtCopy + dollarStr;
-    // console.log(amt, dollarStr);
-
-
-    console.log(amt);
-    if (amt < 1) {
-        return 1;
-    }
-    // console.log(amt);
-    return amt;
-}
 
 
 
@@ -848,656 +879,6 @@ const parseDescription = () => {
 
 /***/ }),
 
-/***/ "./data/parsePieData.js":
-/*!******************************!*\
-  !*** ./data/parsePieData.js ***!
-  \******************************/
-/*! exports provided: fundTypes, fullBudget, functionalArea, functionalArea_Agencies, fundTypes_funds, fpCategories */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fundTypes", function() { return fundTypes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fullBudget", function() { return fullBudget; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "functionalArea", function() { return functionalArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "functionalArea_Agencies", function() { return functionalArea_Agencies; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fundTypes_funds", function() { return fundTypes_funds; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fpCategories", function() { return fpCategories; });
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-
-
-
-const convertToInt = (str) => {
-    let num = str.replace(/[$,]/g, "");
-    return parseInt(num);
-}
-
-
-
-function dataCleanFormat(data) {
-    let cleanData = {
-        name: data.key,
-    };
-
-    // debugger
-
-    if (data.value) {
-        // cleanData.sub = [];
-        
-        for (let key in data.value) {
-
-            // cleanData.name = key;
-            cleanData.value = data.value[key];
-            // let newObj = {
-            //     name: key,
-            //     value: data.value[key]
-            // }
-            // cleanData.sub.push(newObj);
-        }
-    } else if (data.values) {
-        cleanData.sub = [];
-        
-        data.values.forEach((obj) => {
-            let inner = dataCleanFormat(obj);
-            cleanData.sub.push(inner);
-        });
-    }
-
-    return cleanData;
-}
-
-
-
-
-const fundTypes = (data) => {
-    let func = {
-        key: "Functional Area",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d.Function)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-
-const fullBudget = (data) => {
-
-    let func = {
-        key: "Full Budget",
-        value: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-const functionalArea = (data) => {
-
-    let func = {
-        key: "Functional Area",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d.Function)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-const functionalArea_Agencies = (data) => {
-
-    let func = {
-        key: "Agencies",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d.Function)
-            .key((d) => d.Agency)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-
-
-
-
-
-
-// export const fundTypes = (data) => {
-
-//     let func = {
-//         key: "Fund Types",
-//         values: d3.nest()
-//             .key((d) => d["Fund Type"])
-//             .rollup((v) => {
-//                 return {
-//                     "2019-20": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2019-20  Estimates"]);
-//                         return value * 1000;
-//                     }),
-//                     "2018-19": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2018-19  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2017-18": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2017-18  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2016-17": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2016-17  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2015-16": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2015-16  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2014-15": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2014-15  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2013-14": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2013-14  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2012-13": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2012-13  Actuals"]);
-//                         return value * 1000;
-//                     }),
-//                     "2011-12": d3.sum(v, (e) => {
-//                         let value = convertToInt(e["2011-12  Actuals"]);
-//                         return value * 1000;
-//                     })
-//                 }
-//             }).entries(data),
-//     }
-//     return dataCleanFormat(func);
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const fundTypes_funds = (data) => {
-
-    let func = {
-        key: "Funds",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d["Fund Type"])
-            .key((d) => d.Fund)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-
-const fpCategories = (data) => {
-
-    let func = {
-        key: "FP Categories",
-        values: d3__WEBPACK_IMPORTED_MODULE_0__["nest"]()
-            .key((d) => d["FP Category"])
-            .rollup((v) => {
-                return {
-                    "2019-20": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3__WEBPACK_IMPORTED_MODULE_0__["sum"](v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-    return dataCleanFormat(func);
-}
-
-
-
-
-
-
-
-
-
-
-
-function convertToDollar(amt) {
-    let dollarStr = "";
-    let amtCopy = amt;
-
-    // while (amtCopy > 1000){
-    //     let value = amtCopy % 1000;
-
-    //     if(dollarStr !== ""){
-    //         dollarStr = value + ',' + dollarStr;
-    //     } else {
-    //         dollarStr = value;
-    //     }
-    //     amtCopy = Math.floor(amtCopy / 1000);
-    // }
-
-    // dollarStr = amtCopy + dollarStr;
-    // console.log(amt, dollarStr);
-
-
-    console.log(amt);
-    if (amt < 1) {
-        return 1;
-    }
-    // console.log(amt);
-    return amt;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const parseData = (data) => {
-
-//     let func = {
-//         key: "NYS CAFR",
-//         values: d3.nest()
-//             .key((d) => d.Function)
-//             .key((d) => d.Agency)
-//             .key((d) => d["Fund Type"])
-//             .key((d) => d["FP Category"])
-//             .key((d) => d.Fund)
-//             .rollup((v) => {
-//                 return {
-//                     "2019-20": d3.sum(v, (e) => {
-//                         let amt = e["2019-20  Estimates"] || "0";
-//                         return convertToInt(amt);
-//                     }),
-//                     // "2018-19": d3.sum(v, (e) => {
-//                     //     let amt = e["2018-19  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2017-18": d3.sum(v, (e) => {
-//                     //     let amt = e["2017-18  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2016-17": d3.sum(v, (e) => {
-//                     //     let amt = e["2016-17  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2015-16": d3.sum(v, (e) => {
-//                     //     let amt = e["2015-16  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2014-15": d3.sum(v, (e) => {
-//                     //     let amt = e["2014-15  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2013-14": d3.sum(v, (e) => {
-//                     //     let amt = e["2013-14  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2012-13": d3.sum(v, (e) => {
-//                     //     let amt = e["2012-13  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2011-12": d3.sum(v, (e) => {
-//                     //     let amt = e["2011-12  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2010-11": d3.sum(v, (e) => {
-//                     //     let amt = e["2010-11  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                     // "2009-10": d3.sum(v, (e) => {
-//                     //     let amt = e["2009-10  Actuals"] || "0";
-//                     //     return convertToInt(amt);
-//                     // }),
-//                 }
-
-//             })
-//             .entries(data)
-//     }
-
-//     // console.log(func);
-//     return func;
-// }
-
-/***/ }),
-
-/***/ "./data/pieGraph.js":
-/*!**************************!*\
-  !*** ./data/pieGraph.js ***!
-  \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
-
-
-
-
-const pieGraph = (data) => {
-    const width = 500;
-    const height = Math.min(width, 500);
-
-
-    const color = d3__WEBPACK_IMPORTED_MODULE_0__["scaleOrdinal"]()
-        .domain(data.map(d => d.name))
-        .range(d3__WEBPACK_IMPORTED_MODULE_0__["quantize"](t => d3__WEBPACK_IMPORTED_MODULE_0__["interpolateSpectral"](t * 0.8 + 0.1), data.length).reverse());
-
-    const pie = d3__WEBPACK_IMPORTED_MODULE_0__["pie"]()
-        .sort(null)
-        .value(d => d.value);
-
-
-
-
-    const arc = d3__WEBPACK_IMPORTED_MODULE_0__["arc"]()
-        .innerRadius(0)
-        .outerRadius(Math.min(width, height) / 2 - 1);
-
-    
-    const arcs = pie(data);
-
-    const svg = d3__WEBPACK_IMPORTED_MODULE_0__["create"]("svg")
-        .attr("viewBox", [0, 0, width, height])
-        .attr("text-anchor", "middle")
-        .style("font", "12px sans-serif");
-
-    // SLICES
-    const g = svg.append("g")
-        .attr("transform", `translate(${width / 2},${height / 2})`);
-
-    // LABELS
-    svg.append("g")
-        .attr("class", "labels");  
-
-    g.selectAll("path")
-        .data(arcs)
-        .enter().append("path")
-        .attr("fill", d => color(d.data.name))
-        .attr("stroke", "white")
-        .attr("d", arc)
-        .append("title")
-        .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
-
-    const text = g.selectAll("text")
-        .data(arcs)
-        .enter().append("text")
-        .attr("transform", d => {
-            // debugger
-
-            let coord = arc.centroid(d);
-            // coord[0] *= 2;
-            // coord[1] *= 2;
-
-            return `translate(${coord})`
-    })
-        .attr("dy", "0.35em");
-
-    text.append("tspan")
-        .attr("x", 0)
-        .attr("y", "-0.7em")
-        .style("font-weight", "bold")
-        .text(d => {
-            // debugger
-            return d.data.name
-        });
-
-    text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-        .attr("x", 0)
-        .attr("y", "0.7em")
-        .attr("fill-opacity", 0.7)
-        .text(d => d.data.value.toLocaleString());
-
-
-    
-
-    const chart = document.getElementById("chart");
-    chart.append(svg.node());
-
-}
-
-
-/* harmony default export */ __webpack_exports__["default"] = (pieGraph);
-
-/***/ }),
-
 /***/ "./js/index.js":
 /*!*********************!*\
   !*** ./js/index.js ***!
@@ -1509,20 +890,18 @@ const pieGraph = (data) => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! d3 */ "./node_modules/d3/index.js");
 /* harmony import */ var _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../data/parseBarsData */ "./data/parseBarsData.js");
-/* harmony import */ var _data_parsePieData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/parsePieData */ "./data/parsePieData.js");
-/* harmony import */ var _data_parseDescription__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../data/parseDescription */ "./data/parseDescription.js");
-/* harmony import */ var _data_barGraph__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../data/barGraph */ "./data/barGraph.js");
-/* harmony import */ var _data_pieGraph__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../data/pieGraph */ "./data/pieGraph.js");
+/* harmony import */ var _data_parseDescription__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../data/parseDescription */ "./data/parseDescription.js");
+/* harmony import */ var _data_barGraph__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../data/barGraph */ "./data/barGraph.js");
 
 
+// import * as parsePieData from '../data/parsePieData';
 
 
-
-
+// import pieGraph from '../data/pieGraph';
 // import barGraph2 from '../data/barGraph2';
 
 let fullBudget, functionalArea, functionalArea_Agencies, fundTypes, fundTypes_funds, fpCategories;
-let description = Object(_data_parseDescription__WEBPACK_IMPORTED_MODULE_3__["parseDescription"])();
+let description = Object(_data_parseDescription__WEBPACK_IMPORTED_MODULE_2__["parseDescription"])();
 
 
 
@@ -1536,27 +915,11 @@ document.addEventListener("DOMContentLoaded", () => {
     d3__WEBPACK_IMPORTED_MODULE_0__["csv"]("./data/SpendingData2.csv")
         .then((data) => {
             fullBudget = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["fullBudget"](data);
-            functionalArea = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["functionalArea"](data);
             functionalArea_Agencies = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["functionalArea_Agencies"](data);
-            fundTypes = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["fundTypes"](data);
             fundTypes_funds = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["fundTypes_funds"](data);
             fpCategories = _data_parseBarsData__WEBPACK_IMPORTED_MODULE_1__["fpCategories"](data);
-
-            // console.log(fullBudget);
-            // console.log(functionalArea);
-            // console.log(functionalArea_Agencies);
-            // console.log(fundTypes);
-            // console.log(fundTypes_funds);
-            // console.log(fpCategories);
-
             
-            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_4__["default"])(fullBudget.sub);
-            // pieGraph(fullBudget.sub);
-
-
-            // let fundTypes_pie = parsePieData.fundTypes(data);
-            // pieGraph(fundTypes_pie.sub);
-            // debugger
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(fullBudget.values);
         });
 
 
@@ -1572,27 +935,41 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderChart(tab) {
 
     toggleActiveMainTabs(tab);
+    let title = null;
 
     switch(tab.id) {
         case "fullBudget":
-            clearSubTabs();
+            clearMainSubTabs();
             clearMoreInfo();
-            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_4__["default"])(fullBudget.sub);
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(fullBudget.values);
             break;
         case "functions":
-            clearSubTabs();
+            clearMainSubTabs();
             clearMoreInfo();
-            generateSubTabs(functionalArea.sub);
+            title = functionalArea_Agencies.name;
+
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(functionalArea_Agencies.values);
+            generateSubTitle(title, "sub_tabs-main");
+            generateMainSubTabs(functionalArea_Agencies.sub);
             break;
         case "fundTypes":
-            clearSubTabs();
+            clearMainSubTabs();
             clearMoreInfo();
-            generateSubTabs(fundTypes.sub);
+            title = fundTypes_funds.name;
+
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(fundTypes_funds.values);
+            generateSubTitle(title, "sub_tabs-main");
+            generateMainSubTabs(fundTypes_funds.sub);
             break;
+
         case "fpCategories":
-            clearSubTabs();
+            clearMainSubTabs();
             clearMoreInfo();
-            generateSubTabs(fpCategories.sub);
+            title = fpCategories.name;
+
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(fpCategories.values);
+            generateSubTitle(title, "sub_tabs-main");
+            generateMainSubTabs(fpCategories.sub);
             break;
     }
 }
@@ -1600,28 +977,103 @@ function renderChart(tab) {
 
 
 
-function generateSubTabs(list){
-    let subTabs = document.getElementById('sub_tabs');
+function generateMainSubTabs(list){
+    // let subTitle = document.getElementById('sub_title');
+    let subTabs = document.getElementById('sub_tabs-main');
+
+    // debugger
+    subTabs.parentElement.classList.add('active');
+
+
+    list.forEach(obj => {
+        // debugger
+        let li = document.createElement('li');
+        let text = document.createTextNode(obj.name);
+        let amt = document.createTextNode(convertToDollar(obj.values[0].value));
+        let span1 = document.createElement('span');
+        let span2 = document.createElement('span');
+        span1.append(text);
+        span2.append(amt);
+        li.append(span1);
+        li.append(span2);
+
+        li.addEventListener('click', (e) => {
+            toggleActiveSubTabs(e.target);
+            clearSubSubTabs();
+            clearMoreInfo();
+            // debugger
+            if (obj.sub) {
+                generateSubTitle(obj.name, "sub_tabs-sub");
+                generateSubSubTabs(obj.sub);
+            }
+            
+            if(description[e.target.innerText] !== undefined){
+                generateMoreInfo(e.target.innerText);
+            }
+            // debugger
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(obj.values)
+        });
+        subTabs.append(li);
+    });
+}
+
+
+function generateSubSubTabs(list) {
+    let subTabs = document.getElementById('sub_tabs-sub');
     subTabs.classList.add('active');
 
 
     list.forEach(obj => {
         let li = document.createElement('li');
         let text = document.createTextNode(obj.name);
-        li.append(text);
+        let amt = document.createTextNode(convertToDollar(obj.values[0].value));
+        let span1 = document.createElement('span');
+        let span2 = document.createElement('span');
+        span1.append(text);
+        span2.append(amt);
+        li.append(span1);
+        li.append(span2);
+
         li.addEventListener('click', (e) => {
             toggleActiveSubTabs(e.target);
             clearMoreInfo();
-            
-            if(description[e.target.innerText] !== undefined){
+
+            if (description[e.target.innerText] !== undefined) {
                 generateMoreInfo(e.target.innerText);
             }
 
-            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_4__["default"])(obj.sub)
+            Object(_data_barGraph__WEBPACK_IMPORTED_MODULE_3__["default"])(obj.values)
         });
         subTabs.append(li);
     });
 }
+
+
+
+function generateSubTitle(title, target) {
+
+    let subTabs = document.getElementById(target);
+
+    let titleSpan = document.createElement('span');
+    let titleNode = document.createTextNode(title);
+    
+    titleSpan.append(titleNode);
+
+    switch(target){
+        case "sub_tabs-main":
+            titleSpan.classList.add('sub_main_title');
+            break;
+        case "sub_tabs-sub":
+            titleSpan.classList.add('sub_sub_title');
+            break;
+    }
+
+    
+
+    subTabs.append(titleSpan);
+}
+
+
 
 function generateMoreInfo(info) {
     // debugger
@@ -1641,6 +1093,9 @@ function generateMoreInfo(info) {
 }
 
 
+
+
+
 function toggleActiveMainTabs(tab) {
     let tabs = document.getElementsByClassName('tabs_container');
     let li = tabs[0].querySelector('.active');
@@ -1651,15 +1106,27 @@ function toggleActiveMainTabs(tab) {
 
 function toggleActiveSubTabs(listItem) {
     let list = document.getElementById('sub_tabs');
-    let li = list.querySelector('.active');
-    if (li) li.classList.remove('active');
+    let li = list.querySelectorAll('.active');
+    li.forEach(line => line.classList.remove('active'));
     
     listItem.classList.add('active');
 }
 
 
-function clearSubTabs() {
-    let subTabs = document.getElementById('sub_tabs');
+
+
+
+function clearMainSubTabs() {
+    let subTabs = document.getElementById('sub_tabs-main');
+    subTabs.classList.remove('active');
+    while (subTabs.firstChild) {
+        subTabs.removeChild(subTabs.firstChild);
+    }
+}
+
+
+function clearSubSubTabs() {
+    let subTabs = document.getElementById('sub_tabs-sub');
     subTabs.classList.remove('active');
     while (subTabs.firstChild) {
         subTabs.removeChild(subTabs.firstChild);
@@ -1694,6 +1161,41 @@ function toggleMoreInfo() {
         moreBtn.classList.add('close');
         moreBtn.innerText = "CLOSE";
     }
+}
+
+
+
+
+
+
+
+function convertToDollar(amt) {
+    if (amt === 0) return '0';
+    
+    let str = amt.toString();
+    let dollarStr = "";
+    
+
+    let startIndex = -3;
+    let endIndex = -3;
+
+    while (str.length > 0) {
+        // let startIndex = (str.length < 3) ? 0 : (str.length - 3);
+        // let endIndex = (str.length < 3) ? str.length : (str.length - 3);
+
+        let value = str.slice(startIndex, str.length);  
+        str = str.slice(0, endIndex);
+        
+
+        if (!dollarStr) {
+            dollarStr += value;
+        } else {
+            dollarStr = value + "," + dollarStr;
+        }
+
+        // if (parseInt(str) < 4) break;
+    }
+    return dollarStr;
 }
 
 /***/ }),

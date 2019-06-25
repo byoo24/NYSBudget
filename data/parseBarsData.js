@@ -8,30 +8,60 @@ const convertToInt = (str) => {
 
 
 
+
+
+
+
+
+
+
 function dataCleanFormat(data) {
     let cleanData = {
         name: data.key,
+        sub: [],
+        values: []
     };
 
     if (data.value) {
-        cleanData.sub = [];
+        cleanData.sub = null;
         
         for (let key in data.value) {
             let newObj = {
                 name: key,
                 value: data.value[key]
             }
-            cleanData.sub.push(newObj);
+            cleanData.values.push(newObj);
         }
     } else if (data.values) {
-        cleanData.sub = [];
         
         data.values.forEach((obj) => {
-            let inner = dataCleanFormat(obj);
-            cleanData.sub.push(inner);
+
+            let innerObj = dataCleanFormat(obj);
+            cleanData.sub.push(innerObj);
+
+            if (cleanData.values.length < 1) {
+
+                // deep dup
+                innerObj.values.forEach((obj) => {
+                    let newObj = {};
+
+                    for (let key in obj) {
+                        newObj.name = obj.name;
+                        newObj.value = obj.value;
+                    }
+                    cleanData.values.push(newObj);
+                })
+
+            } else {
+
+                for (let i = 0; i < cleanData.values.length; i++) {
+                    let num1 = cleanData.values[i].value;
+                    let num2 = innerObj.values[i].value;
+                    cleanData.values[i].value = num1 + num2;
+                }
+            }
         });
     }
-
     return cleanData;
 }
 
@@ -91,67 +121,67 @@ export const fullBudget = (data) => {
 
 
 
-export const functionalArea = (data) => {
+// export const functionalArea = (data) => {
 
-    let func = {
-        key: "Functional Area",
-        values: d3.nest()
-            .key((d) => d.Function)
-            .rollup((v) => {
-                return {
-                    "2019-20": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
+//     let func = {
+//         key: "Functional Area",
+//         values: d3.nest()
+//             .key((d) => d.Function)
+//             .rollup((v) => {
+//                 return {
+//                     "2019-20": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2019-20  Estimates"]);
+//                         return value * 1000;
+//                     }),
+//                     "2018-19": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2018-19  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2017-18": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2017-18  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2016-17": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2016-17  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2015-16": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2015-16  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2014-15": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2014-15  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2013-14": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2013-14  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2012-13": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2012-13  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2011-12": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2011-12  Actuals"]);
+//                         return value * 1000;
+//                     })
+//                 }
+//             }).entries(data),
+//     }
 
-    let cleanData = dataCleanFormat(func);
+//     let cleanData = dataCleanFormat(func);
 
 
-    cleanData.sub = cleanData.sub.filter(function(x) {
-        return x.sub[0].value > 0;
-    });
+//     cleanData.sub = cleanData.sub.filter(function(x) {
+//         return x.sub[0].value > 0;
+//     });
 
-    cleanData.sub.sort(function(x, y) {
-        return d3.descending(x.sub[0].value, y.sub[0].value);
-    });
+//     cleanData.sub.sort(function(x, y) {
+//         return d3.descending(x.sub[0].value, y.sub[0].value);
+//     });
     
-    return cleanData;
-}
+//     return cleanData;
+// }
 
 
 
@@ -160,9 +190,10 @@ export const functionalArea = (data) => {
 export const functionalArea_Agencies = (data) => {
 
     let func = {
-        key: "Agencies",
+        key: "Functional Area",
         values: d3.nest()
             .key((d) => d.Function)
+
             .key((d) => d.Agency)
             .rollup((v) => {
                 return {
@@ -210,91 +241,95 @@ export const functionalArea_Agencies = (data) => {
 
     let cleanData = dataCleanFormat(func);
 
-    cleanData.sub.forEach((obj) => {
+    cleanData.sub.forEach((level1) => {
 
-        obj.sub = obj.sub.filter(function (x) {
-            return x.sub[0].value > 0;
+        level1.sub = level1.sub.filter(function (x) {
+            return x.values[0].value > 0;
         });
 
-        obj.sub.sort(function (x, y) {
-            return d3.descending(x.sub[0].value, y.sub[0].value);
+        level1.sub.sort(function (x, y) {
+            return d3.descending(x.values[0].value, y.values[0].value);
         });
     });
-
-    return cleanData;
-}
-
-
-
-
-
-
-
-
-
-
-
-export const fundTypes = (data) => {
-
-    let func = {
-        key: "Fund Types",
-        values: d3.nest()
-            .key((d) => d["Fund Type"])
-            .rollup((v) => {
-                return {
-                    "2019-20": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2019-20  Estimates"]);
-                        return value * 1000;
-                    }),
-                    "2018-19": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2018-19  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2017-18": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2017-18  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2016-17": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2016-17  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2015-16": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2015-16  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2014-15": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2014-15  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2013-14": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2013-14  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2012-13": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2012-13  Actuals"]);
-                        return value * 1000;
-                    }),
-                    "2011-12": d3.sum(v, (e) => {
-                        let value = convertToInt(e["2011-12  Actuals"]);
-                        return value * 1000;
-                    })
-                }
-            }).entries(data),
-    }
-
-    let cleanData = dataCleanFormat(func);
-
-    cleanData.sub = cleanData.sub.filter(function (x) {
-        return x.sub[0].value > 0;
-    })
 
     cleanData.sub.sort(function (x, y) {
-        return d3.descending(x.sub[0].value, y.sub[0].value);
+        return d3.descending(x.values[0].value, y.values[0].value);
     });
-    
     
     return cleanData;
 }
+
+
+
+
+
+
+
+
+
+
+
+// export const fundTypes = (data) => {
+
+//     let func = {
+//         key: "Fund Types",
+//         values: d3.nest()
+//             .key((d) => d["Fund Type"])
+//             .rollup((v) => {
+//                 return {
+//                     "2019-20": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2019-20  Estimates"]);
+//                         return value * 1000;
+//                     }),
+//                     "2018-19": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2018-19  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2017-18": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2017-18  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2016-17": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2016-17  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2015-16": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2015-16  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2014-15": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2014-15  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2013-14": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2013-14  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2012-13": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2012-13  Actuals"]);
+//                         return value * 1000;
+//                     }),
+//                     "2011-12": d3.sum(v, (e) => {
+//                         let value = convertToInt(e["2011-12  Actuals"]);
+//                         return value * 1000;
+//                     })
+//                 }
+//             }).entries(data),
+//     }
+
+//     let cleanData = dataCleanFormat(func);
+
+//     cleanData.sub = cleanData.sub.filter(function (x) {
+//         return x.sub[0].value > 0;
+//     })
+
+//     cleanData.sub.sort(function (x, y) {
+//         return d3.descending(x.sub[0].value, y.sub[0].value);
+//     });
+    
+    
+//     return cleanData;
+// }
 
 
 
@@ -362,19 +397,42 @@ export const fundTypes_funds = (data) => {
                 }
             }).entries(data),
     }
+    // let cleanData = dataCleanFormat(func);
+
+    // cleanData.sub.forEach((obj) => {
+    //     obj.sub = obj.sub.filter(function (x) {
+    //         return x.sub[0].value > 0;
+    //     });
+
+    //     obj.sub.sort(function (x, y) {
+    //         return d3.descending(x.sub[0].value, y.sub[0].value);
+    //     });
+    // })
+    
+    // return cleanData;
+
+
+
     let cleanData = dataCleanFormat(func);
 
-    cleanData.sub.forEach((obj) => {
-        obj.sub = obj.sub.filter(function (x) {
-            return x.sub[0].value > 0;
+    cleanData.sub.forEach((level1) => {
+
+        level1.sub = level1.sub.filter(function (x) {
+            return x.values[0].value > 0;
         });
 
-        obj.sub.sort(function (x, y) {
-            return d3.descending(x.sub[0].value, y.sub[0].value);
+        level1.sub.sort(function (x, y) {
+            return d3.descending(x.values[0].value, y.values[0].value);
         });
-    })
-    
+    });
+
+    cleanData.sub.sort(function (x, y) {
+        return d3.descending(x.values[0].value, y.values[0].value);
+    });
+
     return cleanData;
+
+    
 }
 
 
@@ -429,16 +487,16 @@ export const fpCategories = (data) => {
                 }
             }).entries(data),
     }
+
     let cleanData = dataCleanFormat(func);
-
+    
     cleanData.sub = cleanData.sub.filter(function (x) {
-        return x.sub[0].value > 0;
-    })
-
-    cleanData.sub.sort(function (x, y) {
-        return d3.descending(x.sub[0].value, y.sub[0].value);
+        return x.values[0].value > 0;
     });
 
+    cleanData.sub.sort(function (x, y) {
+        return d3.descending(x.values[0].value, y.values[0].value);
+    });
 
     return cleanData;
 }
@@ -453,32 +511,7 @@ export const fpCategories = (data) => {
 
 
 
-function convertToDollar(amt) {
-    let dollarStr = "";
-    let amtCopy = amt;
 
-    // while (amtCopy > 1000){
-    //     let value = amtCopy % 1000;
-
-    //     if(dollarStr !== ""){
-    //         dollarStr = value + ',' + dollarStr;
-    //     } else {
-    //         dollarStr = value;
-    //     }
-    //     amtCopy = Math.floor(amtCopy / 1000);
-    // }
-
-    // dollarStr = amtCopy + dollarStr;
-    // console.log(amt, dollarStr);
-
-
-    console.log(amt);
-    if (amt < 1) {
-        return 1;
-    }
-    // console.log(amt);
-    return amt;
-}
 
 
 

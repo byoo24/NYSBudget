@@ -5,6 +5,11 @@ body {
     padding: 0;
 }
 
+ul {
+    margin: 0;
+    padding: 0;
+}
+
 .nysBudget {
     display: block;
 }
@@ -78,6 +83,9 @@ header {
 }
 
 
+
+
+
 #sub_tabs {
     display: none;
     list-style: none;
@@ -88,15 +96,57 @@ header {
 }
 
 #sub_tabs.active {
-    display: block;
+    display: flex;
 }
 
 
 #sub_tabs li {
-    display: block;
+    display: flex;
+    justify-content: space-between;
     padding: 1em 2em;
-
+    transition-property: background-color, color;
+    transition-duration: .3s;
 }
+
+#sub_tabs li:hover {
+    color: #fff;
+    background-color: #4782b4;
+}
+
+
+#sub_tabs-main,
+#sub_tabs-sub {
+    width: 50%;
+}
+
+
+
+#sub_tabs-main{
+    border-right: 1px solid #000;
+}
+
+
+
+.sub_main_title,
+.sub_sub_title {
+    display: block;
+    width: 100%;
+    font-size: 1.15em;
+    font-weight: 700;
+    padding: 1em 2em;
+    text-align: center;
+    color: #333;
+    border-bottom: 1px solid black;
+    box-sizing: border-box;
+    background: lightskyblue;
+    text-transform: uppercase;
+}
+
+
+.sub_sub_title {
+    background: lightgoldenrodyellow;
+}
+
 
 
 #sub_tabs li.active,
