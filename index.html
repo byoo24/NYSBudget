@@ -1,77 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NYS CAFR</title>
+    <title>NYS Budget</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <script src="dist/bundle.js"></script>
-    <!-- <script src="https://d3js.org/d3.v4.js"></script> -->
-    <!-- <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script> -->
-</head>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/solid.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/fontawesome.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.9.0/css/brands.css"  crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
 
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
 <body>
 
-    <div class="nysBudget">
-
-        <header>
-            <h1 class="header_title">New York State Budget</h1>
-            <span class="credit">The data was taken from <a target="#" href="https://openbudget.ny.gov/">OpenBudget</a></span>
+    <section id="nysBudget">
+        <div class="nysBudget_container">
+            <header>
+                <h1 class="header_title">New York State Budget</h1>
+                <span class="credit">The data was taken from <a target="#" href="https://openbudget.ny.gov/">OpenBudget</a></span>
             
-            <div class="contact">
-                <ul>
-                    <li>Github</li>
-                    <li>Linkedin</li>
-                    <li>AngelList</li>
-                </ul>
-            </div>
-        </header>
-    
-        <div id="chart">
-            <div id=chart_title></div>
-            <div>
-                <span>Sort by:</span>
-                <select id="sortGraph">
-                    <option selected value="name-ascending">Year</option>
-                    <option value="value-ascending">Least to Greatest</option>
-                    <option value="value-descending">Greatest to Least</option>
-                </select>
-            </div>
-            <svg id="graph-bars" viewBox="0,0,500,300"></svg>
-    
-        </div>
+                <div class="contact">
+                        <a target="#" href="https://byoo24.github.io/" class="fas fa-laptop-code"><span class="screen-reader-text">Portfolio</span></a>
+                        <a target="#" href="https://github.com/byoo24" class="fab fa-github"><span class="screen-reader-text">Github</span></a>
+                        <a target="#" href="https://www.linkedin.com/in/byoo24/" class="fab fa-linkedin"><span class="screen-reader-text">Linkedin</span></a>
+                        <a target="#" href="https://angel.co/byoo24" class="fab fa-angellist"><span class="screen-reader-text">AngelList</span></a>
+                </div>
+            </header>
     
     
-    
-        <div id="tabs">
-            <ul class="tabs_container">
-                <li id="fullBudget" class="active">Full Budget</li>
-                <li id="functions">Functional Area</li>
-                <li id="fundTypes">Fund Types</li>
-                <li id="fpCategories">Financial Planning</li>
-            </ul>
-            
-        </div>
-    
-        <div id="info">
-            <div id="sub_title"></div>
-            <div id="sub_tabs">
-                <ul id="sub_tabs-main"></ul>
-                <ul id="sub_tabs-sub"></ul>
-            </div>
-            <div id="more_info">
-                <span class="more_info-btn">More Info</span>
-                <div class="more_info-text hide"></div>
-            </div>
-        </div>
-    
-        <!-- <script src="./dist/bundle.js"></script> -->
+            <div id="chart">
+                <div id="tabs">
+                    <ul class="tabs_main">
+                        <li id="fullBudget" class="active">Full Budget</li>
+                        <li id="functions">Functional Area</li>
+                        <li id="fundTypes">Fund Types</li>
+                        <li id="fpCategories">Financial Planning</li>
+                    </ul>
+                    <ul class="tabs_sub"></ul>
+                </div>
+                
+                <h1 id="current_tab"></h1>
 
-    </div>
+                <svg viewBox="0,0,500,300"></svg>
+                
 
+                <article id="more_info"> </article>
+            </div>
+        </div>
+    </section>
+
+    <script src="dist/bundle.js"></script>
 </body>
-
 </html>

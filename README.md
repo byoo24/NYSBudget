@@ -10,7 +10,6 @@ New York State spends billions of dollars every year to fund various projects su
 * Retrieve NYS OpenBudget's data set
 * Use D3's csv manipulation to clean up the data
 * Implementing JavaScript's DOM manipulation to create user interactivity
-* Sort the data from ascending to descending, and vise versa.
 * Alter the graph by clicking on the menu
 * Popup feature to show more info on a given component.
 
@@ -18,7 +17,7 @@ New York State spends billions of dollars every year to fund various projects su
 
 ## Wireframes
 
-<img src="https://raw.githubusercontent.com/byoo24/nysBudget/master/images/wireframe.png">
+<img src="https://raw.githubusercontent.com/byoo24/NYSBudget/master/images/wireframe.png">
 
 
 

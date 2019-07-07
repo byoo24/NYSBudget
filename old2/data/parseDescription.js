@@ -4,12 +4,8 @@ import * as d3 from 'd3';
 
 
 
-export const parseDescription = {
-        "Functional Area": "A grouping of State agency spending by general programmatic purpose. For example, the functional area of higher education includes spending for SUNY, CUNY, and the Higher Education Services Corporation.",
-        "Fund Types": "These include the General Fund, which is the primary operating fund of the State; Special Revenue Funds, which account for State receipts from specific revenue sources and are legally restricted to disbursement for specified purposes; and Capital Funds, which finance capital construction costs. The sum total of the various funds is considered All Funds.",
-        "Financial Planning": "These are the major spending categories of the State, crossing all functional areas. For example, personal service costs are for salaries and non-wage compensation for State employees and certain payments to non-State employees.",
-
-
+export const parseDescription = () => {
+    return {
         "Aging, Office for the": "The New York State Office for the Aging's (NYSOFA's) home and community-based programs provide older persons access to a well-planned, coordinated package of in-home and other supportive services designed to support and supplement informal care. The NYSOFA's overall goal is to improve access to, and availability of, appropriate and cost-effective non-medical support services for older individuals to maximize their ability to age in their community and avoid higher levels of care and publicly financed care. NYSOFA achieves this through their network of 59 local Offices for the Aging.",
         "Medicaid Inspector General, Office of the": "To enhance the integrity of the New York State Medicaid program by preventing and detecting fraudulent, abusive, and wasteful practices within the Medicaid program and recovering improperly expended Medicaid funds while promoting a high quality of patient care.",
         "Education Department, State": "The New York State Education Department is part of the University of the State of New York (USNY), one of the most complete, interconnected systems of educational services in the United States. SED's mission is to raise the knowledge, skill, and opportunity of all the people in New York. Our vision is to provide leadership for a system that yields the best educated people in the world.",
@@ -72,15 +68,13 @@ export const parseDescription = {
         "Environmental Conservation, Department of": "The mission of the Department of Environmental Conservation is to conserve, improve and protect New York's natural resources and environment and to prevent, abate and control water, land and air pollution, in order to enhance the health, safety and welfare of the people of the state and their overall economic and social well-being.",
         "Adirondack Park Agency": "The APA is a New York State government agency, consisting of approximately 54 staff and an eleven-member board. In 1971 the APA was created by the State Legislature to develop long-range land use plans for both public and private lands within the Park.",
         "Hudson River Park Trust": "Hudson River Park, the longest waterfront park in the United States, has transformed four miles of decaying piers and parking lots along Manhattan's West side into a beloved, urban recreational paradise. Attracting 17 million visits each year, the Park offers a myriad of recreational and educational activities for local residents and visitors alike, and plays a critical role in protecting the Hudson River environment itself.",
+        
 
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
         "General Fund": "This is the major operating fund of the State. It receives all State income not earmarked for a particular program or activity and not specified by law to be deposited in another fund. State income for Financial Plan purposes consists of moneys (taxes, fees, and miscellaneous receipts including certain repayments of State advances) deposited to the credit of the General Fund during the fiscal year and transfers from other funds from current revenues.",
         "Special Revenue Funds - Federal": "This a major fund that accounts for most federal revenues and expenditures. The Federal Special Revenue Fund is divided into several accounts. The Fund accounts for federal grants received by the State that are earmarked for specific programs. The need to satisfy federal accounting and reporting requirements dictates that federal grants be accounted for in a number of separate accounts. These accounts include the Federal USDA - Food and Nutrition Services Accounts, the Federal Health and Human Services Account, the Federal Education Account, the Federal Operating Grants Account, the Unemployment Insurance Ammonization Account, the Federal Unemployment Insurance Occupational Training Account and the Federal Employment and Training Grants Account.",
         "Special Revenue Funds - Other": "These funds account for State receipts from specific non-Federal revenue sources and are legally restricted to disbursement for specified purposes.",
@@ -96,69 +90,15 @@ export const parseDescription = {
         "Federal Miscellaneous Operating Grants Fund": "To account for miscellaneous Federal grants that are each earmarked for specific purposes.",
         "Unemployment Insurance Administration Fund": "To account for services and expenses of administering unemployment insurance and other miscellaneous employment service programs.",
         "Unemployment Insurance Occupational Training Fund": "To account for Federal grants for various employment and training programs.",
-        "State University Income Fund": "To account for certain State University revenues that are earmarked for the operating expenses of the State University of New York.",
-        "HCRA Resources": "To account for health care initiatives financed with HCRA resources.",
-        "State Lottery Fund": "To account for New York State Lottery operations.",
-        "Mass Transportation Operating Assistance Fund": "To account for various taxes earmarked for public mass transportation operating assistance programs.",
-        "School Tax Relief Fund": "To reimburse school districts for the School Tax Relief (STAR) property tax exemptions for homeowners pursuant to the Real Property Tax law.",
-        "Dedicated Mass Transportation Trust Fund": "To account for moneys that are earmarked for mass transportation purposes.",
-        "Metropolitan Transportation Authority Financial Assistance Fund": "To account for dedicated sources of funding for the Metropolitan Transportation Authority to address MTA's operating and capital needs.",
-        "New York State Commercial Gaming": "To account for moneys received from commercial casino regulatory and investigatory fees assessed by the NYS Gaming Commission.",
-        "Indigent Legal Services": "To assist the State, counties and cities in providing legal representation for persons in need of services.",
-        "Court Facilities Incentive Aid Fund": "To account for the distribution of court facilities incentive aid pursuant to State Finance Law, Section 54-j.",
-        "Environmental Conservation Special Revenue Fund": "To account for revenues of the Department of Environmental Conservation earmarked for specific purposes.",
-        "Training and Education Program on Occupational Safety and Health Fund": "To account for revenues earmarked for occupational safety and health training, education programs, enforcement activities and other worker protection activities.",
-        "Conservation Fund": "To account for revenues that are earmarked for environmental conservation purposes.",
-        "New York City County Clerks' Operations Offset Fund": "To account for the distribution of dedicated court revenues collected in counties within the City of New York.",
-        "Judiciary Data Processing Offset Fund": "To account for dedicated fees collected for conducting criminal history searches and other searches for data kept electronically by the Unified Court System.",
-        "Clean Air Fund": "To account for revenues dedicated to meet the State's obligations under the Clean Air Act for controlling stationary and mobile sources of air pollution.",
-        "Environmental Protection and Oil Spill Compensation Fund": "To account for revenues earmarked for the environmental protection and oil spill compensation program.",
-        "State Police Motor Vehicle Law Enforcement and MV Theft & Ins Fraud Prevention": "To account for moneys that are deducted for activities relating to the detection, prevention, or reduction of automobile theft.",
-        "Combined Expendable Trust": "To account for various gifts, grants and bequests received by various State departments and agencies pursuant to Section 11 of the State Finance Law.",
-        "New York State Local Government Records Management Improvement": "To account for certain specified fees that are earmarked for improving local government records management.",
-        "Combined Student Loan Fund": "To account for the Student Loan Program administered by the State University of New York.",
-        "Chemical Dependence Service": "To account for revenues realized from the forfeiture of property of criminals pursuant to Article 13-A of the Civil Practice Law, that are earmarked for specific Office of Alcoholism and Substance Abuse Service programs.",
-        "Charter School Stimulus Fund": "To provide financial support, including grants and loans to Charter School applicants and to Charter Schools for start-up costs and for costs associated with the acquisition, renovation, or construction of school facilities.",
-        "Unemployment Insurance Interest and Penalty": "To account for the collection and disposition of unemployment insurance interest and penalty assessments imposed on NYS employers.",
-        "Lake George Park Trust Fund": "To account for revenues earmarked for the Lake George Park Commission for protecting the natural beauty and preserving the pure water supply and other natural resources of the Lake George Park.",
-        "Legislative Computer Services Fund": "To account for revenues earmarked for the development of the Legislature's data processing capabilities.",
-        "Housing Development Fund": "To account for non-interest temporary loans authorized by the Private Housing Finance Law Section 576-d to non-profit housing development companies for initial development costs and for farm worker housing project loans.",
-        "Sewage Treatment Program Management and Administration Fund": "To account for moneys earmarked for the administrative costs of managing the Sewage Treatment Program and the Water Pollution Control Revolving Fund.",
-        "Child Performers Protection Fund": "To account for the costs of administering the registration program necessary for ensuring the employment and education requirements for child performers who work or reside in New York State, pursuant to Article 4-A of the Labor Law.",
-        "New York Great Lakes Protection Fund": "To account for moneys transferred to the State of New York by the Great Lakes Protection Fund for research and other programs for protecting the Great Lakes.",
-        "Arts Capital Revolving Fund": "To account for Not-For Profit Arts Organizations Capital Loan Program.",
-        "Equipment Loan Fund for the Disabled": "To account for loans made to the disabled for the acquisition of equipment.",
-        "Winter Sports Education Trust Fund": "To account for the proceeds from the Olympic Lottery Game set aside as a trust fund to be invested with the principal and interest earmarked for the benefit of the New York State Olympic Regional Development Authority.",
-        "Mental Hygiene Gifts and Donations Fund": "To account for various gifts and donations to Mental Hygiene facilities for purposes designated by the donor.",
-        "Combined Nonexpendable Trust Fund": "To account for gifts and bequests received by various State departments and agencies pursuant to Section 11 of the State Finance Law; the principal of which must be preserved intact with only the interest income available for expenditure and loans made to OMH voluntary providers for start-up costs related to intermediate care facilities.",
-        "Vocational Rehabilitation Fund": "To account for rehabilitative services to individuals totally or partially incapacitated for work financed by a fee earmarked for that purpose.",
-        "Capital Projects Fund": "To account for the financing of the construction of capital facilities or the acquisition of capital facilities.",
-        "Dedicated Highway and Bridge Trust Fund": "To account for dedicated revenues used to finance transportation related capital projects and payments for debt service on NYS Thruway Authority bonds.",
-        "Housing Program Fund": "To account for the Low Income Housing Trust Fund Program, the Affordable Home Ownership Development Program and the Homeless Housing and Assistance Program that is financed by the New York State Housing Finance Agency. To maintain and repair existing facilities financed by the Housing Finance Agency.",
-        "Correctional Facilities Capital Improvement Fund": "To account for correctional facilities capital projects financed by the New York State Urban Development Corporation.",
-        "Mental Hygiene Facilities Capital Improvement": "To account for Mental Hygiene capital projects financed by the New York State Medical Care Facilities Finance Agency or Dormitory Authority as successor agency.",
-        "Environmental Protection Fund": "To account for dedicated revenues which will be used to assist local government, not-for-profit corporations, and fund State initiatives to protect the environment and protect open space.",
-        "State Parks Infrastructure Fund": "To account for the rehabilitation, preservation and improvement of State park facilities and historic sites.",
-        "Hazardous Waste Remedial Fund": "To account for revenues earmarked for the clean-up of hazardous waste disposal sites.",
-        "SUNY Residence Halls Rehabilitation and Repair Fund": "To account for State University capital projects financed by Dormitory and room rentals and other college fees.",
-        "State University Capital Projects Fund": "To account for State University capital projects financed by Dormitory Authority bond proceeds, SUNY Income Fund and other non-State revenue sources.",
-        "Division for Youth Facilities Improvement Fund": "To account for Division for Youth Facilities Improvement capital projects financed by the New York State Urban Development Corporation.",
-        "Natural Resources Damages Fund": "To account for restoration and/or replacement acquisition projects undertaken as a result of natural resource damage claims.",
-        "New York State Canal System Development Fund": "To account for moneys that are earmarked for the operations of the NYS canal system.",
-        "Forest Preserve Expansion Fund": "To account for the acquisition of land for the forest preserve in the Adirondacks and Catskill Parks.",
-        "General Debt Service Fund": "To account for the payments of principal and interest on the State's general obligation bonds, revenue bonds and certain lease purchase agreements that are financed from General Fund revenues, other authorized transfers, dedicated PIT receipts (25%), Sales Tax (1%) and ARRA federal interest subsidy payments.",
-        "Local Government Assistance Tax Fund": "To account for revenues earmarked for payment to the New York Local Government Assistance Corporation for debt service.",
-        "Department of Health Income": "To account for certain Department of Health revenues that are earmarked for the payment of obligations under the terms of agreements between the Department of Health, the Dormitory Authority, and the Roswell Park Cancer Institute (RPCI).",
-        "Mental Health Services Fund": "To account for the payment of debt service in conjunction with lease purchase agreements between the Facilities Development Corporation and the New York State Medical Care Facilities Finance Agency, or the Dormitory Authority as successor agency.",
-        "Housing Debt Fund": "To account for the repayment of advances made to cities, towns, villages, public corporations and low-income housing authorities from the proceeds of the State Housing Bonds that are earmarked for paying the principal and interest on State Housing bonds.",
-        "Federal Capital Projects": "To account for capital projects financed from Federal grants.",
+        
 
 
 
 
 
 
-
+        
+        
         "Grants to Local Gov.": "Includes payments to counties, cities, towns, villages, school districts and other local entities, as well as certain financial assistance to, or on behalf of, individuals and nonprofit organizations.",
         "Personal Service": "Includes the payment of salaries and compensation for State employees.",
         "Capital Projects": "Include payments made for the acquisition or construction of the State's capital facilities. Included in this category are planning, land acquisition, design, construction, engineering services, and equipment costs attributable to highway, parkway and rail preservation projects; outdoor recreation and environmental conservation projects; payments to local government units and public authorities to help finance highways, parkways, bridges, mass transportation, aviation, economic development, port development, community colleges, community and State mental hygiene buildings, outdoor recreational parks, correctional facilities and State-assisted housing as well as environmental quality projects. Advances are made for capital construction costs reimbursable by public authorities, the Federal or local governments, or from the proceeds of State bond and note sales.",
@@ -167,6 +107,5 @@ export const parseDescription = {
         "Debt Service": "Includes payments made for tax-financed State debt service on long-term debt; contractual-obligation and lease-purchase arrangements with several public authorities and municipalities; and lease-purchase payments for Health and Mental Hygiene facilities.",
         "Fringe Benefits": "Includes contributions to pension systems, the employer's share of Social Security contributions, employer contributions toward the cost of health insurance, workers compensation and unemployment insurance, and contributions to union employee benefit funds which provide vision care and other services.",
         "Indirect Costs": "Includes agency or central service agency costs that cannot be directly associated with the administration of a particular program and therefore cannot be charged as a direct program expense. Indirect costs include, but are not limited to, physical overhead, space occupancy, utilities, information technology and central service agency costs."
+    }
 }
-
-

@@ -1,229 +1,211 @@
 import * as d3 from 'd3';
-import * as parseBarsData from '../data/parseBarsData';
-// import * as parsePieData from '../data/parsePieData';
-import { parseDescription } from '../data/parseDescription';
-import barGraph from '../data/barGraph';
-// import pieGraph from '../data/pieGraph';
-// import barGraph2 from '../data/barGraph2';
+import * as parseData from '../data/parseData';
+const { parseDescription } = require('../data/parseDescription');
 
-let fullBudget, functionalArea, functionalArea_Agencies, fundTypes, fundTypes_funds, fpCategories;
-let description = parseDescription();
+// D3 Bar Graph
+const width = 500;
+const height = 300;
+const svg = d3.select('svg');
+// svg.attr("viewBox", [0, 0, width, height]);
+
+const margin = {
+    top: 20,
+    right: 0,
+    bottom: 30,
+    left: 90
+}
+
+const animateDuration = 600;
+const animateDelay = 100;
 
 
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    document.getElementsByClassName('more_info-btn')[0]
-        .addEventListener('click', () => toggleMoreInfo());
+// D3 Render
+const render = data => {
+    d3.selectAll('svg > *').remove();
+    d3.select('#tooltip').remove();
+
+    let xValue = d => d.name;
+    let yValue = d => d.value;
+
+    let tooltip = d3.select('#nysBudget')
+        .append('div')
+        .attr('id', 'tooltip')
+        .style('position', 'absolute')
+        .style('background', '#f4f4f4')
+        .style('padding', '5px 15px')
+        .style('border', '1px #333 solid')
+        .style('border-radius', '5px')
+        .style('opacity', '0');
 
 
+    let yScale = d3.scaleLinear()
+        .domain([0, d3.max(data, yValue)])
+        .range([height - margin.bottom, margin.top]);
 
-    d3.csv("./data/SpendingData2.csv")
-        .then((data) => {
-            fullBudget = parseBarsData.fullBudget(data);
-            functionalArea_Agencies = parseBarsData.functionalArea_Agencies(data);
-            fundTypes_funds = parseBarsData.fundTypes_funds(data);
-            fpCategories = parseBarsData.fpCategories(data);
+    let xScale = d3.scaleBand()
+        .domain(data.map(xValue))
+        .range([margin.left, width - margin.right])
+        .padding(0.1);
+
+    let yAxis = g => g
+        .attr('transform', `translate(${margin.left}, 0)`)
+        .call(d3.axisLeft(yScale))
+        .call(g => g.select(".domain").remove());
+
+    let xAxis = g => g
+        .attr('transform', `translate(0, ${height - margin.bottom})`)
+        .call(d3.axisBottom(xScale).tickSizeOuter(0));
+
+    let gy = svg.append('g')
+        .call(yAxis);
+
+    let gx = svg.append('g')
+        .call(xAxis);
+
+    let g = svg.append('g')
+            .attr('id', 'bars')
+            .attr('fill', 'steelblue')
+            .selectAll('rect')
+            .data(data)
+            .enter().append('rect')
+            .attr('x', d => xScale(xValue(d)))
+            .attr('y', height - margin.bottom)
+            .attr('height', 0)
+            .attr('width', d => xScale.bandwidth())
+        .on('mouseover', d => {
             
-            barGraph(fullBudget.values);
+            tooltip.transition()
+                .style('opacity', 1);
+            tooltip.html(d.value)
+                .style('left', (d3.event.pageX) + 'px')
+                .style('top', (d3.event.pageY) + 'px');
+
+            d3.select(this).style('opacity', 0.5);
+        })
+        .on('mouseout', d => {
+            tooltip.transition()
+                .style('opacity', 0)
+            d3.select(this).style('opacity', 1)
         });
 
 
-        let tabs = document.querySelectorAll('.tabs_container li');
-        tabs.forEach((tab) => {
-            tab.addEventListener('click', (e) => renderChart(e.target))
-        });
-    
-});
+    g.transition()
+        .attr('height', d => yScale(0) - yScale(yValue(d)))
+        .attr('y', d => yScale(yValue(d)))
+        .duration(animateDuration)
+        .delay((d, i) => i * animateDelay)
+        .ease(d3.easeElastic);
+};
 
+
+
+
+// D3 CSV and DOM Manipulation
+
+let fullBudget = null;
+let functionalArea = null;
+let fundTypes = null;
+let fpCategories = null;
+
+
+document.querySelectorAll('.tabs_main li')
+        .forEach(tab => tab.addEventListener('click', 
+            e => {
+                clearActive('.tabs_main');
+                e.target.classList.add('active');
+                changeCurrentTab(e.target.innerText);
+                renderMoreInfo(e.target.innerText);
+                renderChart(e.target.innerText);
+            })
+        );
+
+d3.csv('./data/SpendingData.csv')
+    .then(data => {
+        fullBudget = parseData.fullBudget(data);
+        functionalArea = parseData.functionalArea(data);
+        fundTypes = parseData.fundTypes(data);
+        fpCategories = parseData.fpCategories(data);
+
+        changeCurrentTab(fullBudget.name);
+        render(fullBudget.values);
+    })
+        
+        
+
+
+
+
+// DOM Manipulation
 
 
 function renderChart(tab) {
-
-    toggleActiveMainTabs(tab);
-    let title = null;
-
-    switch(tab.id) {
-        case "fullBudget":
-            clearMainSubTabs();
-            clearMoreInfo();
-            barGraph(fullBudget.values);
+    switch (tab) {
+        case "Full Budget":
+            clearSubTabs();
+            render(fullBudget.values);
             break;
-        case "functions":
-            clearMainSubTabs();
-            clearMoreInfo();
-            title = functionalArea_Agencies.name;
-
-            barGraph(functionalArea_Agencies.values);
-            generateSubTitle(title, "sub_tabs-main");
-            generateMainSubTabs(functionalArea_Agencies.sub);
+        case "Functional Area":
+            renderSubTabs(functionalArea);
+            render(functionalArea.values);
             break;
-        case "fundTypes":
-            clearMainSubTabs();
-            clearMoreInfo();
-            title = fundTypes_funds.name;
-
-            barGraph(fundTypes_funds.values);
-            generateSubTitle(title, "sub_tabs-main");
-            generateMainSubTabs(fundTypes_funds.sub);
+        case "Fund Types":
+            renderSubTabs(fundTypes);
+            render(fundTypes.values);
             break;
-
-        case "fpCategories":
-            clearMainSubTabs();
-            clearMoreInfo();
-            title = fpCategories.name;
-
-            barGraph(fpCategories.values);
-            generateSubTitle(title, "sub_tabs-main");
-            generateMainSubTabs(fpCategories.sub);
+        case "Financial Planning":
+            renderSubTabs(fpCategories);
+            render(fpCategories.values);
             break;
     }
 }
 
 
 
+const subTabs = document.getElementsByClassName('tabs_sub')[0];
 
-function generateMainSubTabs(list){
-    // let subTitle = document.getElementById('sub_title');
-    let subTabs = document.getElementById('sub_tabs-main');
-
-    // debugger
-    subTabs.parentElement.classList.add('active');
-
-
-    list.forEach(obj => {
-        // debugger
-        let li = document.createElement('li');
-        let text = document.createTextNode(obj.name);
-        let amt = document.createTextNode(convertToDollar(obj.values[0].value));
-        let span1 = document.createElement('span');
-        let span2 = document.createElement('span');
-        span1.append(text);
-        span2.append(amt);
-        li.append(span1);
-        li.append(span2);
-
-        li.addEventListener('click', (e) => {
-            toggleActiveSubTabs(e.target);
-            clearSubSubTabs();
-            clearMoreInfo();
-            // debugger
-            if (obj.sub) {
-                generateSubTitle(obj.name, "sub_tabs-sub");
-                generateSubSubTabs(obj.sub);
-            }
-            
-            if(description[e.target.innerText] !== undefined){
-                generateMoreInfo(e.target.innerText);
-            }
-            // debugger
-            barGraph(obj.values)
-        });
-        subTabs.append(li);
-    });
-}
-
-
-function generateSubSubTabs(list) {
-    let subTabs = document.getElementById('sub_tabs-sub');
-    subTabs.classList.add('active');
-
-
-    list.forEach(obj => {
-        let li = document.createElement('li');
-        let text = document.createTextNode(obj.name);
-        let amt = document.createTextNode(convertToDollar(obj.values[0].value));
-        let span1 = document.createElement('span');
-        let span2 = document.createElement('span');
-        span1.append(text);
-        span2.append(amt);
-        li.append(span1);
-        li.append(span2);
-
-        li.addEventListener('click', (e) => {
-            toggleActiveSubTabs(e.target);
-            clearMoreInfo();
-
-            if (description[e.target.innerText] !== undefined) {
-                generateMoreInfo(e.target.innerText);
-            }
-
-            barGraph(obj.values)
-        });
-        subTabs.append(li);
-    });
-}
-
-
-
-function generateSubTitle(title, target) {
-
-    let subTabs = document.getElementById(target);
-
-    let titleSpan = document.createElement('span');
-    let titleNode = document.createTextNode(title);
+function renderSubTabs(root) {
+    clearSubTabs();
     
-    titleSpan.append(titleNode);
+    
 
-    switch(target){
-        case "sub_tabs-main":
-            titleSpan.classList.add('sub_main_title');
-            break;
-        case "sub_tabs-sub":
-            titleSpan.classList.add('sub_sub_title');
-            break;
+    if (root.sub !== null) {
+        root.sub.forEach(obj => {
+            const li = document.createElement('li');
+            const text = document.createTextNode(obj.name);
+            li.append(text);
+
+            li.addEventListener('click', e => {
+                changeCurrentTab(obj.name);
+                render(obj.values);
+                renderMoreInfo(obj.name);
+
+                if (obj.sub !== null) {
+                    renderSubTabs(obj);
+
+                    const back = document.createElement('li');
+                    const backText = document.createTextNode('Back');
+                    back.classList.add('back');
+                    back.append(backText);
+                    back.addEventListener('click', () => {
+                        changeCurrentTab(root.name);
+                        render(root.values);
+                        renderSubTabs(root);
+                        renderMoreInfo(root.name);
+                    });
+                    subTabs.prepend(back);
+                }
+            });
+
+            subTabs.append(li);
+        });
     }
-
     
-
-    subTabs.append(titleSpan);
 }
 
 
-
-function generateMoreInfo(info) {
-    // debugger
-    let moreInfo = document.getElementById('more_info');
-    moreInfo.classList.add('show');
-
-    let moreText = document.getElementsByClassName('more_info-text')[0];
-    let h2 = document.createElement('h2');
-    let title = document.createTextNode(info);
-    let p = document.createElement('p');
-    let text = document.createTextNode(description[info])
-    h2.append(title);
-    p.append(text);
-
-    moreText.append(h2)
-    moreText.append(p);
-}
-
-
-
-
-
-function toggleActiveMainTabs(tab) {
-    let tabs = document.getElementsByClassName('tabs_container');
-    let li = tabs[0].querySelector('.active');
-    li.classList.remove('active');
-    tab.classList.add('active');
-}
-
-
-function toggleActiveSubTabs(listItem) {
-    let list = document.getElementById('sub_tabs');
-    let li = list.querySelectorAll('.active');
-    li.forEach(line => line.classList.remove('active'));
-    
-    listItem.classList.add('active');
-}
-
-
-
-
-
-function clearMainSubTabs() {
-    let subTabs = document.getElementById('sub_tabs-main');
+function clearSubTabs() {
+    // let subTabs = document.getElementById('sub_tabs-main');
     subTabs.classList.remove('active');
     while (subTabs.firstChild) {
         subTabs.removeChild(subTabs.firstChild);
@@ -231,75 +213,27 @@ function clearMainSubTabs() {
 }
 
 
-function clearSubSubTabs() {
-    let subTabs = document.getElementById('sub_tabs-sub');
-    subTabs.classList.remove('active');
-    while (subTabs.firstChild) {
-        subTabs.removeChild(subTabs.firstChild);
-    }
-}
-
-function clearMoreInfo() {
-    let moreInfo = document.getElementById('more_info');
-    moreInfo.classList.remove('show');
-
-    
-    let moreText = document.getElementsByClassName('more_info-text')[0];
-    moreText.classList.add('hide');
-    while (moreText.firstChild) {
-        moreText.removeChild(moreText.firstChild);
-    }
+function clearActive(info) {
+    const tab = document.querySelector(`${info} .active`);
+    tab.classList.remove('active');
 }
 
 
-function toggleMoreInfo() {
-    let moreBtn = document.getElementsByClassName('more_info-btn')[0];
-    let moreText = document.getElementsByClassName('more_info-text')[0];
-    
-    moreText.classList.toggle('hide');
-
-    // debugger
-
-    if (moreText.classList.contains('hide')) {
-        moreBtn.classList.remove('close');
-        moreBtn.innerText = "More Info";
-    } else {    
-        moreBtn.classList.add('close');
-        moreBtn.innerText = "CLOSE";
-    }
+function changeCurrentTab(newText) {
+    const current = document.getElementById('current_tab');
+    current.innerText = newText;
 }
 
 
-
-
-
-
-
-function convertToDollar(amt) {
-    if (amt === 0) return '0';
+function renderMoreInfo(subject) {
+    const moreInfo = document.getElementById('more_info');
+    const text = parseDescription[subject];
     
-    let str = amt.toString();
-    let dollarStr = "";
-    
-
-    let startIndex = -3;
-    let endIndex = -3;
-
-    while (str.length > 0) {
-        // let startIndex = (str.length < 3) ? 0 : (str.length - 3);
-        // let endIndex = (str.length < 3) ? str.length : (str.length - 3);
-
-        let value = str.slice(startIndex, str.length);  
-        str = str.slice(0, endIndex);
-        
-
-        if (!dollarStr) {
-            dollarStr += value;
-        } else {
-            dollarStr = value + "," + dollarStr;
-        }
-
-        // if (parseInt(str) < 4) break;
+    if(text !== undefined) {
+        moreInfo.innerHTML = text;
+        moreInfo.style.opacity = 1;
+    } else {
+        moreInfo.style.opacity = 0;
+        moreInfo.innerHTML = " ";
     }
-    return dollarStr;
 }
