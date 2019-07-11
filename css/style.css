@@ -4,6 +4,7 @@ body {
     display:grid;
     font-size: 10px;
     font-family: 'Roboto', sans-serif;
+    background-size: cover;
     overflow: overlay;
     overscroll-behavior: none;
 }

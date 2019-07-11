@@ -7,12 +7,13 @@ New York State spends billions of dollars every year to fund various projects su
 
 ## Functionality & MVP
 
-* Retrieve NYS OpenBudget's data set
-* Use D3's csv manipulation to clean up the data
-* Implementing JavaScript's DOM manipulation to create user interactivity
-* Alter the graph by clicking on the menu
-* Popup feature to show more info on a given component.
-
+* Retrieve NYS OpenBudget's data set.
+* Deploy D3's csv manipulation to clean the data into a useable form.
+* Implement D3's svg graphical component to display the data.
+* Utilize JavaScript's DOM manipulation to create an interactive menu.
+* Integrate JavaScript's DOM manipulation with D3's SVG manipulation to display data value via a hover effect.
+* Display more information based on the current active component.
+* Design the page using a responsive, mobile first approach.
 
 
 ## Wireframes
@@ -33,5 +34,6 @@ This project will be implemented using:
 
 
 Bonus featuers:
-* Deploy Backbone.js as the Model to implement a MVC environment.
-* Add High Chart's graphical component to create more interactivity.
+* Deploy Backbone.js to mimic a MVC environment. This will improve the quality of user interaction.
+* Implement additional graphs, either a line graph or pie chart, to display more information.
+* Integrate the data with High Chart's graphical toolsets.
